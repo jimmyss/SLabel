@@ -6,6 +6,10 @@ import localeWorkplace from '@/views/dashboard/workplace/locale/zh-CN';
 import localeSettings from './zh-CN/settings';
 
 export default {
+  'menu.home': '首页',
+  'menu.dataset': '我的数据集',
+  'menu.models': '我的模型',
+  'menu.task': '我的标注任务',
   'menu.dashboard': '仪表盘',
   'menu.server.dashboard': '仪表盘-服务端',
   'menu.server.workplace': '工作台-服务端',
