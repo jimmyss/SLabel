@@ -4,12 +4,13 @@ import { AppRouteRecordRaw } from '../types';
 const HOME: AppRouteRecordRaw = {
   path: '/home',
   name: 'home',
-  component: DEFAULT_LAYOUT,
+  component: () => import('@/views/home/index.vue'),
   meta: {
     locale: 'menu.home',
     requiresAuth: true,
     icon: 'icon-home',
     order: 0,
+    roles: ['*'],
   },
 };
 
