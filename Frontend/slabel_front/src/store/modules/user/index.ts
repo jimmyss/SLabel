@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import {
   login as userLogin,
+  register as userRegister,
   logout as userLogout,
   getUserInfo,
   LoginData,
+  RegisterData,
 } from '@/api/user';
 import { setToken, clearToken } from '@/utils/auth';
 import { removeRouteListener } from '@/utils/route-listener';
@@ -77,6 +79,18 @@ const useUserStore = defineStore('user', {
       removeRouteListener();
       appStore.clearServerMenu();
     },
+
+    // Register
+    async register(registerForm: RegisterData) {
+      try {
+        const res = await userRegister(registerForm);
+        setToken(res.data.token);
+      } catch (err) {
+        clearToken();
+        throw err;
+      }
+    },
+
     // Logout
     async logout() {
       try {

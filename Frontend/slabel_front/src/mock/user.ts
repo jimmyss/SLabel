@@ -62,6 +62,23 @@ setupMock({
       return failResponseWrap(null, '账号或者密码错误', 50000);
     });
 
+    Mock.mock(new RegExp('/api/user/register'), (params: MockParams) => {
+      const { username, password, confirmPassword } = JSON.parse(params.body);
+      if (!username) {
+        return failResponseWrap(null, '用户名不能为空', 50000);
+      }
+      if (!password) {
+        return failResponseWrap(null, '密码不能为空', 50000);
+      }
+      if (!confirmPassword) {
+        return failResponseWrap(null, '确认密码不能为空', 50000);
+      }
+      if (password !== confirmPassword) {
+        return failResponseWrap(null, '两次密码不一致', 50000);
+      }
+      return successResponseWrap({token: '12345'});
+    });
+
     // 登出
     Mock.mock(new RegExp('/api/user/logout'), () => {
       return successResponseWrap(null);

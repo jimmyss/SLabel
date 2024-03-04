@@ -55,7 +55,7 @@
         <a-button type="primary" html-type="submit" long :loading="loading">
           {{ $t('login.form.login') }}
         </a-button>
-        <a-button type="text" long class="login-form-register-btn">
+        <a-button long class="login-form-register-btn" @click="$emit('switchForm')" >
           {{ $t('login.form.register') }}
         </a-button>
       </a-space>
@@ -104,7 +104,7 @@
         await userStore.login(values as LoginData);
         const { redirect, ...othersQuery } = router.currentRoute.value.query;
         router.push({
-          name: (redirect as string) || 'Workplace',
+          name: (redirect as string) || 'home',
           query: {
             ...othersQuery,
           },
@@ -123,6 +123,7 @@
       }
     }
   };
+
   const setRememberPassword = (value: boolean) => {
     loginConfig.value.rememberPassword = value;
   };

@@ -10,7 +10,8 @@
     <LoginBanner />
     <div class="content">
       <div class="content-inner">
-        <LoginForm />
+        <component :is="currentFormComponent" @switchForm="handleSwitchForm" />
+        <!-- <LoginForm /> -->
       </div>
       <div class="footer">
         <Footer />
@@ -20,9 +21,22 @@
 </template>
 
 <script lang="ts" setup>
+  import {ref, computed} from 'vue';
   import Footer from '@/components/footer/index.vue';
   import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
+  import RegisterForm from './components/register-form.vue';
+
+  const currentForm = ref('LoginForm');
+
+  const currentFormComponent = computed(() => {
+    return currentForm.value === 'LoginForm' ? LoginForm : RegisterForm;
+  });
+
+  function handleSwitchForm() {
+    currentForm.value = currentForm.value === 'LoginForm' ? 'RegisterForm' : 'LoginForm';
+  }
+
 </script>
 
 <style lang="less" scoped>

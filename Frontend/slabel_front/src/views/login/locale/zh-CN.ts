@@ -17,4 +17,12 @@ export default {
   'login.banner.subSlogan2': '国际化，路由配置，状态管理应有尽有',
   'login.banner.slogan3': '接入可视化增强工具AUX',
   'login.banner.subSlogan3': '实现灵活的区块式开发',
+  'register.form.title': '快速注册SLabel吧！🚀',
+  'register.form.sub.title': '无需认证，更加便捷',
+  'register.form.register': '注册',
+  'register.form.login': '返回登录',
+  'register.form.userName.errMsg': '用户名不能为空',
+  'register.form.password.errMsg': '密码不能为空',
+  'register.form.confirmPassword.errMsg': '确认密码不能为空',
+  'register.form.register.success':'注册成功，跳转主页中',
 };
