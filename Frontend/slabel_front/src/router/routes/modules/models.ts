@@ -1,10 +1,9 @@
-import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
 const MODELS: AppRouteRecordRaw = {
   path: '/models',
   name: 'models',
-  component: DEFAULT_LAYOUT,
+  component: () => import('@/views/models/index.vue'),
   meta: {
     locale: 'menu.models',
     requiresAuth: true,

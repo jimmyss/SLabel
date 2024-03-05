@@ -1,6 +1,9 @@
 import localeMessageBox from '@/components/message-box/locale/zh-CN';
 import localeLogin from '@/views/login/locale/zh-CN';
 
+import localeHome from '@/views/home/local/zh-CN';
+import localeTask from '@/views/task/local/zh-CN';
+
 import localeSettings from './zh-CN/settings';
 
 export default {
@@ -26,4 +29,7 @@ export default {
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,
+  
+  ...localeHome,
+  ...localeTask,
 };

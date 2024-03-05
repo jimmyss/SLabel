@@ -1,4 +1,3 @@
-import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
 const HOME: AppRouteRecordRaw = {

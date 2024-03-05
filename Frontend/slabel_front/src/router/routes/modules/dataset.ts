@@ -1,10 +1,9 @@
-import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
 const DATASET: AppRouteRecordRaw = {
   path: '/dataset',
   name: 'dataset',
-  component: DEFAULT_LAYOUT,
+  component: () => import('@/views/dataset/index.vue'),
   meta: {
     locale: 'menu.dataset',
     requiresAuth: true,
