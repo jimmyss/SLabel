@@ -25,7 +25,7 @@ jobs:
       
     - name: Build Vue Project # 构建Vue项目
       run: |
-        cd ../../Frontend/slabel_front
+        cd Frontend/slabel_front
         npm install
         npm run build
 
