@@ -18,11 +18,13 @@ jobs:
         java-version: '17'
         distribution: 'zulu'
     - name: Build and Package Spring Boot Project # 构建Spring Boot项目
-      run: ./gradlew build -x test
+      run: |
+        cd Backend/slabel
+        ./gradlew build -x test
       
     - name: Build Vue Project # 构建Vue项目
       run: |
-        cd Frontend
+        cd ../../Frontend/slabel_front
         npm install
         npm run build
 
