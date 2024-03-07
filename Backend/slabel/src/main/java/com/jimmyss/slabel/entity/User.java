@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,6 +20,8 @@ public class User implements Serializable {
     private String username;
     @Column(name="password")
     private String password;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Dataset> datasets;
 
     public User(String username, String password){
         this.username=username;

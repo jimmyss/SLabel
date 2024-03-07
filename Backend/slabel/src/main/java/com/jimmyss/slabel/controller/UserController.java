@@ -11,26 +11,18 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/v1/users")
 public class UserController {
     @Resource
     private UserServiceImpl userService;
 
     @PostMapping("/login")
     BaseResponse login(@RequestBody @Valid UserBaseVO userBaseVO){
-        System.out.println(userBaseVO);
         return userService.loginService(userBaseVO.getUsername(), userBaseVO.getPassword());
     }
 
     @PostMapping("/register")
     BaseResponse register(@RequestBody @Valid UserBaseVO userBaseVO) {
-        System.out.println(userBaseVO);
         return userService.registerService(userBaseVO.getUsername(), userBaseVO.getPassword());
-    }
-
-    @GetMapping("/hello")
-    BaseResponse hello(){
-        System.out.println("hello");
-        return BaseResponse.success("hello");
     }
 }
