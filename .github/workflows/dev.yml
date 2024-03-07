@@ -16,7 +16,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '17'
-        distribution: 'oracle'
+        distribution: 'zulu'
     - name: Build and Package Spring Boot Project # 构建Spring Boot项目
       run: ./gradlew build -x test
       
