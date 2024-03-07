@@ -21,6 +21,7 @@ jobs:
       run: |
         cd Backend/slabel
         ./gradlew build -x test
+        cd ../../
       
     - name: Build Vue Project # 构建Vue项目
       run: |
