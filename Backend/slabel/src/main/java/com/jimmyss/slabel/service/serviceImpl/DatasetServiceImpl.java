@@ -37,7 +37,7 @@ public class DatasetServiceImpl implements DatasetService {
                 .map(Dataset::getDatasetName)
                 .orElse("default_dataset");
         // use sftp request
-
+        return null;
     }
 
     @Override
@@ -47,12 +47,13 @@ public class DatasetServiceImpl implements DatasetService {
         // delete Dataset according to the directory path of this dataset
 
         // remove the information saved in the database
-
+        return null;
     }
 
     @Override
     public BaseResponse addDataset(Integer userId, String uploadDir, String datasetName, String description) {
         //
+        return null;
     }
 
 

@@ -21,16 +21,16 @@ public class DatasetController {
 
     @GetMapping
     BaseResponse downloadDataset(@PathVariable Integer userId, @RequestBody @Valid DatasetBaseVO datasetBaseVO){
-        return datasetService
+        return null;
     }
 
     @DeleteMapping("/{datasetId}")
     BaseResponse deleteDatasetByDatasetId(@PathVariable Integer userId, @PathVariable Integer datasetId, @RequestBody @Valid DatasetBaseVO datasetBaseVO){
-        return datasetService
+        return null;
     }
 
     @PostMapping
     BaseResponse addDataset(@PathVariable Integer userId, @RequestBody @Valid DatasetBaseVO datasetBaseVO){
-        return datasetService
+        return null;
     }
 }
