@@ -1,0 +1,51 @@
+name: dev
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-20.04 # 运行环境
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17 # 为后端Java项目设置JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'oracle'
+    - name: Build and Package Spring Boot Project # 构建Spring Boot项目
+      run: ./gradlew build -x test
+      
+    - name: Build Vue Project # 构建Vue项目
+      run: |
+        cd Frontend
+        npm install
+        npm run build
+
+    - name: Docker Build and Push # 构建Docker镜像并推送
+      run: |
+        docker build -t username/myapp-backend:latest Backend/.
+        docker build -t username/myapp-frontend:latest Frontend/.
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker push username/myapp-backend:latest
+        docker push username/myapp-frontend:latest
+
+    - name: deploy to Aliyun
+      uses: easingthemes/ssh-deploy@main
+      env:
+          # 私钥
+          SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_PRIVATE_KEY }}
+          #SCp参数
+          ARGS: "-rltgoDzvO --delete"
+          #源目录
+          SOURCE: "./"
+          #服务器Ip:换成你的服务器iP
+          REMOTE_HOST:  ${{ secrets.ALIYUN_SERVER_HOST }}
+          #用户
+          REMOTE_USER: ${{secrets.REMOTE_USER}}
+          #目标地址
+          TARGET: ${{secrets.REMOTE_TARGET}}
