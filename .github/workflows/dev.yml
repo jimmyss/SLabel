@@ -7,53 +7,88 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-20.04 # 运行环境
+  deploy:
+    runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: SSH key setup
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     
-    - name: Set up JDK 17 # 为后端Java项目设置JDK
-      uses: actions/setup-java@v2
+    - name: Connect to Server and Deploy
+      uses: appleboy/ssh-action@master
       with:
-        java-version: '17'
-        distribution: 'zulu'
-    - name: Build and Package Spring Boot Project # 构建Spring Boot项目
-      run: |
-        cd Backend/slabel
-        ./gradlew build -x test
-        cd ../../
-    - name: Set up Node.js # 为前端Vue项目设置Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }} # Default is 22
+        script: |
+          cd /root/SLable
+          git pull origin main
+          # Backend build and run commands
+          cd Backend/slabel
+          ./gradlew build -x test
+          # You might want to kill the current backend process before restarting
+          java -jar build/libs/your-app-name.jar &
+          cd ../..
+          # Frontend build commands
+          cd Frontend/slabel_front
+          npm install
+          npm run build
+          # Use a reverse proxy or any server to serve your frontend files
+          # For example, restart Nginx to load new static files
+          sudo systemctl restart nginx
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-20.04 # 运行环境
+#     steps:
+#     - uses: actions/checkout@v4
+    
+#     - name: Set up JDK 17 # 为后端Java项目设置JDK
+#       uses: actions/setup-java@v2
+#       with:
+#         java-version: '17'
+#         distribution: 'zulu'
+#     - name: Build and Package Spring Boot Project # 构建Spring Boot项目
+#       run: |
+#         cd Backend/slabel
+#         ./gradlew build -x test
+#         cd ../../
+#     - name: Set up Node.js # 为前端Vue项目设置Node.js
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: '18'
 
-    - name: Build Vue Project # 构建Vue项目
-      run: |
-        cd Frontend/slabel_front
-        npm install
-        npm run build
-        cd ../../
+#     - name: Build Vue Project # 构建Vue项目
+#       run: |
+#         cd Frontend/slabel_front
+#         npm install
+#         npm run build
+#         cd ../../
 
-    - name: Docker Build and Push # 构建Docker镜像并推送
-      run: |
-        docker build -t jimmy/slabel_backend:latest Backend/slabel/.
-        docker build -t jimmy/slabel_frontend:latest Frontend/slabel_front/.
-        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-        docker push jimmy/slabel_backend:latest
-        docker push jimmy/slabel_frontend:latest
+#     - name: Docker Build and Push # 构建Docker镜像并推送
+#       run: |
+#         docker build -t jimmy/slabel_backend:latest Backend/slabel/.
+#         docker build -t jimmy/slabel_frontend:latest Frontend/slabel_front/.
+#         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+#         docker push jimmy/slabel_backend:latest
+#         docker push jimmy/slabel_frontend:latest
 
-    - name: deploy to Aliyun
-      uses: easingthemes/ssh-deploy@main
-      env:
-          # 私钥
-          SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_PRIVATE_KEY }}
-          #SCp参数
-          ARGS: "-rltgoDzvO --delete"
-          #源目录
-          SOURCE: "./"
-          #服务器Ip:换成你的服务器iP
-          REMOTE_HOST:  ${{ secrets.ALIYUN_SERVER_HOST }}
-          #用户
-          REMOTE_USER: ${{secrets.REMOTE_USER}}
-          #目标地址
-          TARGET: ${{secrets.REMOTE_TARGET}}
+#     - name: deploy to Aliyun
+#       uses: easingthemes/ssh-deploy@main
+#       env:
+#           # 私钥
+#           SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_PRIVATE_KEY }}
+#           #SCp参数
+#           ARGS: "-rltgoDzvO --delete"
+#           #源目录
+#           SOURCE: "./"
+#           #服务器Ip:换成你的服务器iP
+#           REMOTE_HOST:  ${{ secrets.ALIYUN_SERVER_HOST }}
+#           #用户
+#           REMOTE_USER: ${{secrets.REMOTE_USER}}
+#           #目标地址
+#           TARGET: ${{secrets.REMOTE_TARGET}}
