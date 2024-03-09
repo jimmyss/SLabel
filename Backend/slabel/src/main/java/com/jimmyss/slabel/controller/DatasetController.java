@@ -19,7 +19,7 @@ public class DatasetController {
         return datasetService.getDatasetByUserIdService(userId, datasetBaseVO.getNum());
     }
 
-    @GetMapping
+    @GetMapping("/download")
     BaseResponse downloadDataset(@PathVariable Integer userId, @RequestBody @Valid DatasetBaseVO datasetBaseVO){
         return null;
     }
