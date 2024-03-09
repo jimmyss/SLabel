@@ -5,6 +5,7 @@ import com.jimmyss.slabel.entity.Dataset;
 import com.jimmyss.slabel.repository.DatasetRepository;
 import com.jimmyss.slabel.service.DatasetService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class DatasetServiceImpl implements DatasetService {
     @Override
     public BaseResponse getDatasetByUserIdService(Integer userId, Integer number) {
         Pageable limit = (Pageable) PageRequest.of(0, number);
-        List<Dataset> datasetList=datasetRepository.findByUserIdOrderByCreatedDateDesc(userId, limit);
+        Page<Dataset> datasetList=datasetRepository.findByUserIdOrderByCreatedDateDesc(userId, limit);
         return BaseResponse.success("获取数据库成功", datasetList);
     }
 
