@@ -32,14 +32,15 @@ jobs:
         cd Frontend/slabel_front
         npm install
         npm run build
+        cd ../../
 
     - name: Docker Build and Push # 构建Docker镜像并推送
       run: |
-        docker build -t username/myapp-backend:latest Backend/.
-        docker build -t username/myapp-frontend:latest Frontend/.
+        docker build -t jimmy/slabel_backend:latest Backend/slabel/.
+        docker build -t jimmy/slabel_frontend:latest Frontend/slabel_front/.
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-        docker push username/myapp-backend:latest
-        docker push username/myapp-frontend:latest
+        docker push jimmy/slabel_backend:latest
+        docker push jimmy/slabel_frontend:latest
 
     - name: deploy to Aliyun
       uses: easingthemes/ssh-deploy@main
