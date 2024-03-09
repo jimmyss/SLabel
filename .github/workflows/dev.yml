@@ -32,7 +32,7 @@ jobs:
           cd Backend/slabel
           ./gradlew build -x test
           # You might want to kill the current backend process before restarting
-          java -jar build/libs/your-app-name.jar &
+          java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &
           cd ../..
           # Frontend build commands
           cd Frontend/slabel_front
