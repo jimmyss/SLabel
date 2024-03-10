@@ -30,9 +30,10 @@ jobs:
           git pull origin main
           # Backend build and run commands
           cd Backend/slabel
+          ./gradlew clean
           ./gradlew build -x test
           # You might want to kill the current backend process before restarting
-          java -jar build/libs/your-app-name.jar &
+          java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &
           cd ../..
           # Frontend build commands
           cd Frontend/slabel_front
