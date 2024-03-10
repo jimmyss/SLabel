@@ -41,6 +41,7 @@ jobs:
           npm run build
           # Use a reverse proxy or any server to serve your frontend files
           # For example, restart Nginx to load new static files
+          cp -r /root/SLabel/Frontend/dist /var/www/dist
           sudo systemctl restart nginx
 # jobs:
 #   build-and-deploy:
