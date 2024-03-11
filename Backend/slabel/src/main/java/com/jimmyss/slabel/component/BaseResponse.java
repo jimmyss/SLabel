@@ -11,7 +11,7 @@ public class BaseResponse<T> {
     public static <T> BaseResponse<T> success(T object) {
         BaseResponse<T> r = new BaseResponse<T>();
         r.data = object;
-        r.code = 200;
+        r.code = 20000;
         return r;
     }
 
@@ -19,7 +19,7 @@ public class BaseResponse<T> {
         BaseResponse<T> r = new BaseResponse<T>();
         r.msg=msg;
         r.data = object;
-        r.code = 200;
+        r.code = 20000;
         return r;
     }
 

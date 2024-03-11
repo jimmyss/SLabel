@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-
+import com.jimmyss.slabel.util.JwtToken;
 import java.util.LinkedHashMap;
 
 @Service
@@ -19,31 +19,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public BaseResponse<User> loginService(String username, String password){
-        //bcrypt加密处理
+    public BaseResponse<String> loginService(String username, String password){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String ciphertext = encoder.encode(password);
-
         User user = userRepository.findUserByUsername(username);
 
-        //没查到返回登录失败
-        if(user == null) {
-            return BaseResponse.error("找不到用户，请注册");
+        if(user == null || !encoder.matches(password, user.getPassword())){
+            return BaseResponse.error("用户名或密码错误");
         }
 
-        //密码错误登录失败
-        if(!encoder.matches(password, user.getPassword())){
-            return BaseResponse.error("密码错误");
-        }
-
-        // 密码正确token生成
         var map = new LinkedHashMap<String, String>();
         map.put("id", String.valueOf(user.getId()));
         map.put("username", user.getUsername());
-//        String token = JwtToken.create(map);
+        String token = JwtToken.createJwtToken(map);
 
-//        map.put("token", token);
-        return BaseResponse.success("登录成功", user);
+        return BaseResponse.success("登录成功", token);
     }
 
     public BaseResponse<User> registerService(String username, String password){
