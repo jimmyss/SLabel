@@ -20,6 +20,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }} # Default is 22
+        script_stop: true
         script: |
           cd ~/SLable
           git pull origin main
