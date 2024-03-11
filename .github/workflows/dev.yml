@@ -12,6 +12,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
+    - name: Set up Github Credentials
+      run: |
+        git config --global user.email "${{ secrets.GHUBEMAIL }}"
+        git config --global user.name "${{ secrets.GHUBUSERNAME}}"
+        git config --global url.https://${{ secrets.PAT }}@github.com/.insteadOf https://github.com/
     
     - name: Connect to Server and Deploy
       uses: appleboy/ssh-action@master
