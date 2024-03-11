@@ -22,7 +22,7 @@ jobs:
         port: ${{ secrets.PORT }} # Default is 22
         script_stop: true
         script: |
-          cd /home/SLable
+          cd /home/SLabel
           git pull origin main
           # Backend build and run commands
           cd Backend/slabel
