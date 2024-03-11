@@ -39,23 +39,17 @@ jobs:
     - name: Update Repository
       run: ssh staging 'cd /home/SLabel && git pull origin main'
 
-    - name: Change Working Directory to Backend
-      run: ssh staging 'ls && cd Backend/slabel'
-
     - name: Clean and Rebuild Springboot jar file
-      run: ssh staging './gradlew clean && ./gradlew build -x test'
+      run: ssh staging 'cd /home/SLabel/Backend/slabel && ./gradlew clean && ./gradlew build -x test'
 
     - name: ShutDown Current Springboot Backend Process
       run: ssh staging 'pkill -f "java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar"'
 
     - name: Restart Springboot Backend Process
-      run: ssh staging 'nohup java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &'
-
-    - name: Change Working Directory to Frontend
-      run: ssh staging 'cd ../../Frontend/slabel_front'
+      run: ssh staging 'cd /home/SLabel/Backend/slabel && nohup java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &'
       
     - name: Build Backend Dist Directory
-      run: ssh staging 'npm install && npm run build'
+      run: ssh staging 'cd /home/SLabel/Frontend/slabel_front && npm install && npm run build'
 
     - name: Copy Dist Directory to Nginx Config Directory
       run: ssh staging 'cp -r /home/SLabel/Frontend/slabel_front/dist /var/www/dist'
