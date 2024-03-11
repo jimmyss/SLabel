@@ -18,30 +18,74 @@ jobs:
         git config --global user.email "${{ secrets.GHUBEMAIL }}"
         git config --global user.name "${{ secrets.GHUBUSERNAME}}"
         git config --global url.https://${{ secrets.PAT }}@github.com/.insteadOf https://github.com/
-    
-    - name: Connect to Server and Deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.PORT }} # Default is 22
-        script_stop: true
-        script: |
-          cd /home/SLabel
-          git pull origin main
-          # Backend build and run commands
-          cd Backend/slabel
-          ./gradlew clean
-          ./gradlew build -x test
-          # You might want to kill the current backend process before restarting
-          java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &
-          cd ../..
-          # Frontend build commands
-          cd Frontend/slabel_front
-          npm install
-          npm run build
-          # Use a reverse proxy or any server to serve your frontend files
-          # For example, restart Nginx to load new static files
-          cp -r /home/SLabel/Frontend/slabel_front/dist /var/www/dist
-          sudo systemctl restart nginx
+
+    - name: Configure SSH
+      run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+      env:
+        SSH_USER: ${{ secrets.USERNAME }}
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.HOST }}
+
+    - name: Update Repository
+      run: ssh staging 'cd /home/SLabel && git pull origin main'
+
+    - name: Change Working Directory to Backend
+      run: ssh staging 'cd Backend/slabel'
+
+    - name: Clean and Rebuild Springboot jar file
+      run: ssh staging './gradlew clean && ./gradlew build -x test'
+
+    - name: ShutDown Current Springboot Backend Process
+      run: ssh staging 'pkill -f "java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar"'
+
+    - name: Restart Springboot Backend Process
+      run: ssh staging 'nohup java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &'
+
+    - name: Change Working Directory to Frontend
+      run: ssh staging 'cd ../../Frontend/slabel_front'
+      
+    - name: Build Backend Dist Directory
+      run: ssh staging 'npm install && npm run build'
+
+    - name: Copy Dist Directory to Nginx Config Directory
+      run: ssh staging 'cp -r /home/SLabel/Frontend/slabel_front/dist /var/www/dist'
+
+    - name: Restart Nginx
+      run: ssh staging 'sudo systemctl restart nginx'
+      
+    # - name: Connect to Server and Deploy
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.HOST }}
+    #     username: ${{ secrets.USERNAME }}
+    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     port: ${{ secrets.PORT }} # Default is 22
+    #     script_stop: true
+    #     script: |
+    #       cd /home/SLabel
+    #       git pull origin main
+    #       # Backend build and run commands
+    #       cd Backend/slabel
+    #       ./gradlew clean
+    #       ./gradlew build -x test
+    #       # You might want to kill the current backend process before restarting
+    #       java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &
+    #       cd ../..
+    #       # Frontend build commands
+    #       cd Frontend/slabel_front
+    #       npm install
+    #       npm run build
+    #       # Use a reverse proxy or any server to serve your frontend files
+    #       # For example, restart Nginx to load new static files
+    #       cp -r /home/SLabel/Frontend/slabel_front/dist /var/www/dist
+    #       sudo systemctl restart nginx
