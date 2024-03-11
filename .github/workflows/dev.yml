@@ -12,6 +12,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GHUB_TOKEN }}
+    - name: Set up Github Credentials
+      run: |
+        git config --global credential.helper store
+        git config --global user.email "3240429693@qq.com"
+        git config --global user.name "jimmyss"
     
     - name: Connect to Server and Deploy
       uses: appleboy/ssh-action@master
