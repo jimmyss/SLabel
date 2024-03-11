@@ -12,80 +12,75 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
-    - name: Connect to Server and Deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }} # Default is 22
-        script: |
-          cd /root/SLable
-          git pull origin main
-          # Backend build and run commands
-          cd Backend/slabel
-          ./gradlew clean
-          ./gradlew build -x test
-          # You might want to kill the current backend process before restarting
-          java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &
-          cd ../..
-          # Frontend build commands
-          cd Frontend/slabel_front
-          npm install
-          npm run build
-          # Use a reverse proxy or any server to serve your frontend files
-          # For example, restart Nginx to load new static files
-          cp -r /root/SLabel/Frontend/dist /var/www/dist
-          sudo systemctl restart nginx
-# jobs:
-#   build-and-deploy:
-#     runs-on: ubuntu-20.04 # 运行环境
-#     steps:
-#     - uses: actions/checkout@v4
-    
-#     - name: Set up JDK 17 # 为后端Java项目设置JDK
-#       uses: actions/setup-java@v2
-#       with:
-#         java-version: '17'
-#         distribution: 'zulu'
-#     - name: Build and Package Spring Boot Project # 构建Spring Boot项目
-#       run: |
-#         cd Backend/slabel
-#         ./gradlew build -x test
-#         cd ../../
-#     - name: Set up Node.js # 为前端Vue项目设置Node.js
-#       uses: actions/setup-node@v2
-#       with:
-#         node-version: '18'
 
-#     - name: Build Vue Project # 构建Vue项目
-#       run: |
-#         cd Frontend/slabel_front
-#         npm install
-#         npm run build
-#         cd ../../
+    - name: Set up Github Credentials
+      run: |
+        git config --global user.email "${{ secrets.GHUBEMAIL }}"
+        git config --global user.name "${{ secrets.GHUBUSERNAME}}"
+        git config --global url.https://${{ secrets.PAT }}@github.com/.insteadOf https://github.com/
 
-#     - name: Docker Build and Push # 构建Docker镜像并推送
-#       run: |
-#         docker build -t jimmy/slabel_backend:latest Backend/slabel/.
-#         docker build -t jimmy/slabel_frontend:latest Frontend/slabel_front/.
-#         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-#         docker push jimmy/slabel_backend:latest
-#         docker push jimmy/slabel_frontend:latest
+    - name: Configure SSH
+      run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+      env:
+        SSH_USER: ${{ secrets.USERNAME }}
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.HOST }}
 
-#     - name: deploy to Aliyun
-#       uses: easingthemes/ssh-deploy@main
-#       env:
-#           # 私钥
-#           SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_PRIVATE_KEY }}
-#           #SCp参数
-#           ARGS: "-rltgoDzvO --delete"
-#           #源目录
-#           SOURCE: "./"
-#           #服务器Ip:换成你的服务器iP
-#           REMOTE_HOST:  ${{ secrets.ALIYUN_SERVER_HOST }}
-#           #用户
-#           REMOTE_USER: ${{secrets.REMOTE_USER}}
-#           #目标地址
-#           TARGET: ${{secrets.REMOTE_TARGET}}
+    - name: Update Repository
+      run: ssh staging 'cd /home/SLabel && git pull origin main'
+
+    - name: Clean and Rebuild Springboot jar file
+      run: ssh staging 'cd /home/SLabel/Backend/slabel && ./gradlew clean && ./gradlew build -x test'
+
+    - name: Check and ShutDown Current Springboot Backend Process
+      run: 
+        ssh staging 'pgrep -f "java.*slabel-0.0.1-SNAPSHOT.jar" && pkill -f "java.*slabel-0.0.1-SNAPSHOT.jar" || echo "No Spring Boot process found, skipping."'
+
+    - name: Restart Springboot Backend Process
+      run: ssh staging 'cd /home/SLabel/Backend/slabel && nohup java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &'
+      
+    - name: Build Backend Dist Directory
+      run: ssh staging 'cd /home/SLabel/Frontend/slabel_front && npm install && npm run build'
+
+    - name: Copy Dist Directory to Nginx Config Directory
+      run: ssh staging 'cp -r /home/SLabel/Frontend/slabel_front/dist /var/www/dist'
+
+    - name: Restart Nginx
+      run: ssh staging 'sudo systemctl restart nginx'
+      
+    # - name: Connect to Server and Deploy
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.HOST }}
+    #     username: ${{ secrets.USERNAME }}
+    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     port: ${{ secrets.PORT }} # Default is 22
+    #     script_stop: true
+    #     script: |
+    #       cd /home/SLabel
+    #       git pull origin main
+    #       # Backend build and run commands
+    #       cd Backend/slabel
+    #       ./gradlew clean
+    #       ./gradlew build -x test
+    #       # You might want to kill the current backend process before restarting
+    #       java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &
+    #       cd ../..
+    #       # Frontend build commands
+    #       cd Frontend/slabel_front
+    #       npm install
+    #       npm run build
+    #       # Use a reverse proxy or any server to serve your frontend files
+    #       # For example, restart Nginx to load new static files
+    #       cp -r /home/SLabel/Frontend/slabel_front/dist /var/www/dist
+    #       sudo systemctl restart nginx
