@@ -42,8 +42,9 @@ jobs:
     - name: Clean and Rebuild Springboot jar file
       run: ssh staging 'cd /home/SLabel/Backend/slabel && ./gradlew clean && ./gradlew build -x test'
 
-    - name: ShutDown Current Springboot Backend Process
-      run: ssh staging 'pkill -f "java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar"'
+    - name: Check and ShutDown Current Springboot Backend Process
+      run: 
+        ssh staging 'pgrep -f "java.*slabel-0.0.1-SNAPSHOT.jar" && pkill -f "java.*slabel-0.0.1-SNAPSHOT.jar" || echo "No Spring Boot process found, skipping."'
 
     - name: Restart Springboot Backend Process
       run: ssh staging 'cd /home/SLabel/Backend/slabel && nohup java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &'
