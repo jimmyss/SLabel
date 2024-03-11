@@ -20,11 +20,13 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }} # Default is 22
+        script_stop: true
         script: |
-          cd /root/SLable
+          cd ~/SLable
           git pull origin main
           # Backend build and run commands
           cd Backend/slabel
+          ./gradlew clean
           ./gradlew build -x test
           # You might want to kill the current backend process before restarting
           java -jar build/libs/slabel-0.0.1-SNAPSHOT.jar &
@@ -35,5 +37,5 @@ jobs:
           npm run build
           # Use a reverse proxy or any server to serve your frontend files
           # For example, restart Nginx to load new static files
-          cp -r /root/SLabel/Frontend/dist /var/www/dist
+          cp -r ~/SLabel/Frontend/dist /var/www/dist
           sudo systemctl restart nginx
