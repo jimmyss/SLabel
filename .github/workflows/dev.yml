@@ -40,7 +40,7 @@ jobs:
       run: ssh staging 'cd /home/SLabel && git pull origin main'
 
     - name: Change Working Directory to Backend
-      run: ssh staging 'cd Backend/slabel'
+      run: ssh staging 'ls && cd Backend/slabel'
 
     - name: Clean and Rebuild Springboot jar file
       run: ssh staging './gradlew clean && ./gradlew build -x test'
