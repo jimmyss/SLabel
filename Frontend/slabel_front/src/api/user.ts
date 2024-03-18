@@ -13,28 +13,34 @@ export interface RegisterData {
   confirmPassword: string;
 }
 
-export interface LoginRes {
+export interface LoginRes <T=unknown>{
+  msg: string;
+  code: number;
+  data: T;
   token: string;
 }
 
-export interface RegisterRes {
+export interface RegisterRes <T=unknown>{
+  code: number;
+  msg: string;
+  data: T
   token: string;
 }
 
 export function login(data: LoginData) {
-  return axios.post<LoginRes>('/api/user/login', data);
+  return axios.post<LoginRes>('/v1/users/login', data);
 }
 
 export function register(data: RegisterData) {
-  return axios.post<RegisterRes>('/api/user/register', data);
+  return axios.post<RegisterRes>('/v1/users/register', data);
 }
 
 export function logout() {
-  return axios.post<LoginRes>('/api/user/logout');
+  return axios.post<LoginRes>('/v1/users/logout');
 }
 
 export function getUserInfo() {
-  return axios.post<UserState>('/api/user/info');
+  return axios.post<UserState>('/v1/users/info');
 }
 
 export function getMenuList() {

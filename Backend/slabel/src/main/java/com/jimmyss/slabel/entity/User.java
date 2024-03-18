@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -22,6 +23,8 @@ public class User implements Serializable {
     private String password;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Dataset> datasets;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    private Set<LabelTaskPersonalInfo> labelTasks;
 
     public User(String username, String password){
         this.username=username;

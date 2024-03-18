@@ -26,13 +26,21 @@ public class BaseResponse<T> {
     public static <T> BaseResponse<T> error(String msg) {
         var r = new BaseResponse();
         r.msg = msg;
-        r.code = -1;
+        r.code = 50000;
         return r;
     }
     public static <T> BaseResponse<T> error(Integer code, String msg) {
         var r = new BaseResponse();
         r.msg = msg;
         r.code = code;
+        return r;
+    }
+
+    public static <T> BaseResponse<T> error(String msg, T object){
+        var r=new BaseResponse();
+        r.msg=msg;
+        r.data=object;
+        r.code=30000;
         return r;
     }
 

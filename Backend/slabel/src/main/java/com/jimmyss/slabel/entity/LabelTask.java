@@ -7,6 +7,7 @@ import lombok.Generated;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -20,6 +21,8 @@ public class LabelTask {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="dataset_id")
     private Dataset dataset;
+    @OneToMany(mappedBy = "labelTasks", cascade=CascadeType.REFRESH, fetch=FetchType.LAZY)
+    private Set<User> users;
     private String modelDir;
     private String title;
     private String description;
@@ -35,6 +38,20 @@ public class LabelTask {
 
     public LabelTask() {
 
+    }
+
+    public LabelTask(String title,
+                     String description,
+                     String direction,
+                     Date deadline,
+                     Date createdDate,
+                     Status status){
+        this.title=title;
+        this.description=description;
+        this.direction=direction;
+        this.deadline=deadline;
+        this.createdDate=createdDate;
+        this.status=status;
     }
 
 

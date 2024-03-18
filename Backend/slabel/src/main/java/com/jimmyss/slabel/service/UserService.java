@@ -6,6 +6,8 @@ public interface UserService {
 
     BaseResponse loginService(String username, String password);
 
-    BaseResponse registerService(String username, String password);
+    BaseResponse registerService(String username, String password, String confirmPassword);
+
+    BaseResponse logoutService();
 
 }

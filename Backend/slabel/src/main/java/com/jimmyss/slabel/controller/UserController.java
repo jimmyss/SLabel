@@ -1,13 +1,10 @@
 package com.jimmyss.slabel.controller;
 
 import com.jimmyss.slabel.component.BaseResponse;
-import com.jimmyss.slabel.service.UserService;
 import com.jimmyss.slabel.service.serviceImpl.UserServiceImpl;
 import com.jimmyss.slabel.vo.UserBaseVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +20,11 @@ public class UserController {
 
     @PostMapping("/register")
     BaseResponse register(@RequestBody @Valid UserBaseVO userBaseVO) {
-        return userService.registerService(userBaseVO.getUsername(), userBaseVO.getPassword());
+        return userService.registerService(userBaseVO.getUsername(), userBaseVO.getPassword(), userBaseVO.getConfirmPassword());
+    }
+
+    @PostMapping("/logout")
+    BaseResponse logout(){
+        return userService.logoutService();
     }
 }

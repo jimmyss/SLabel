@@ -7,13 +7,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --config ./config/vite.config.dev.ts",
-    "clean": "rimraf dist/",
     "build": "vue-tsc --noEmit && vite build --config ./config/vite.config.prod.ts",
     "report": "cross-env REPORT=true npm run build",
     "preview": "npm run build && vite preview --host",
     "type:check": "vue-tsc --noEmit --skipLibCheck",
     "lint-staged": "npx lint-staged",
-    "prepare": "cd ../../ husky install"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
@@ -31,6 +30,7 @@
     ]
   },
   "dependencies": {
+    "@arco-design/web-vue": "^2.44.7",
     "@vueuse/core": "^9.3.0",
     "arco-design-pro-vue": "^2.7.2",
     "axios": "^0.24.0",
@@ -48,18 +48,13 @@
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
-    "@arco-design/web-vue": "^2.54.6",
     "@arco-plugins/vite-vue": "^1.4.5",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "@types/estree": "^1.0.5",
-    "@types/json-schema": "^7.0.15",
     "@types/lodash": "^4.14.186",
-    "@types/minimatch": "^5.1.2",
     "@types/mockjs": "^1.0.7",
     "@types/nprogress": "^0.2.0",
     "@types/sortablejs": "^1.15.0",
-    "@types/vfile-message": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "@vitejs/plugin-vue": "^3.1.2",
