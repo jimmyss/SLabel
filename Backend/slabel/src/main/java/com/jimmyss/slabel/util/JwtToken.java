@@ -76,7 +76,7 @@ public class JwtToken {
             DecodedJWT jwt = verifier.verify(token);
             Claim claim = jwt.getClaim("id");
             if(!claim.isNull()){
-                return claim.asInt();
+                return Integer.parseInt(jwt.getClaim("id").asString());
             }
         } catch (Exception exception){
             // 如果Token无效或过期，则会抛出异常

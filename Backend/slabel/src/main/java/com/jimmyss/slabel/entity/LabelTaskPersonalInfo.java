@@ -17,7 +17,7 @@ public class LabelTaskPersonalInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Integer id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

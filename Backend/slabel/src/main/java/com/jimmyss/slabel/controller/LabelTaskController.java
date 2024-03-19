@@ -26,8 +26,8 @@ public class LabelTaskController {
     HttpServletRequest request;
 
     @GetMapping("")
-    BaseResponse getTasks(@RequestBody @Valid LabelTaskVO labelTaskVO){
-        return labelTaskService.getLabelTasks(labelTaskVO.getNum(), request);
+    BaseResponse getTasks(@RequestParam(name="num", required=false, defaultValue = "10") Integer num){
+        return labelTaskService.getLabelTasks(num, request);
     }
 
     @PostMapping("")
@@ -65,6 +65,7 @@ public class LabelTaskController {
     @PostMapping("/{taskId}/user")
     BaseResponse addMember(@RequestBody @Valid LabelTaskVO labelTaskVO, @PathVariable Integer taskId){
         return labelTaskService.addMember(
+                request,
                 taskId,
                 labelTaskVO.getUserNameList()
         );

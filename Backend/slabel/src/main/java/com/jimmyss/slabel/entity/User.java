@@ -24,7 +24,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Dataset> datasets;
     @OneToMany(mappedBy = "user", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    private Set<LabelTaskPersonalInfo> labelTasks;
+    private Set<LabelTaskPersonalInfo> labelTaskInfos;
 
     public User(String username, String password){
         this.username=username;

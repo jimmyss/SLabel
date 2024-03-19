@@ -18,7 +18,7 @@ public interface LabelTaskService {
 
     BaseResponse updateTask(HttpServletRequest request, Integer taskId, String title, String description, String direction, Date deadline, LabelTask.Status status);
 
-    BaseResponse addMember(Integer taskId, List<String> userNameList);
+    BaseResponse addMember(HttpServletRequest request, Integer taskId, List<String> userNameList);
 
     BaseResponse deleteMember(HttpServletRequest request, Integer taskId, String userName);
 }

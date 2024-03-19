@@ -21,8 +21,8 @@ public class LabelTask {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="dataset_id")
     private Dataset dataset;
-    @OneToMany(mappedBy = "labelTasks", cascade=CascadeType.REFRESH, fetch=FetchType.LAZY)
-    private Set<User> users;
+    @OneToMany(mappedBy = "labelTask", cascade=CascadeType.REFRESH, fetch=FetchType.LAZY)
+    private Set<LabelTaskPersonalInfo> labelTaskInfos;
     private String modelDir;
     private String title;
     private String description;

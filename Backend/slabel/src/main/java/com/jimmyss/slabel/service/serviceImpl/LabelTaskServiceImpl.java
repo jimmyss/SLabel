@@ -38,7 +38,9 @@ public class LabelTaskServiceImpl implements LabelTaskService {
         String token=JwtToken.getToken(request);
         Integer userId=JwtToken.getUserId(token);
 
-        List<LabelTaskPersonalInfo> taskUserInfo=taskUserRepository.findByUserId(userId);
+        //get taskUserInfo
+        Optional<User> user=userRepository.findUserById(userId);
+        List<LabelTaskPersonalInfo> taskUserInfo=taskUserRepository.findByUserId(user.get().getId());
 
         // get related LabelTasks by user id
         Set<LabelTask> labelTasks=taskUserInfo.stream()
@@ -50,12 +52,15 @@ public class LabelTaskServiceImpl implements LabelTaskService {
 
     @Override
     public BaseResponse<LabelTask> createLabelTask(HttpServletRequest request, String title, String description, String direction, Date deadline){
+        // precheck the title
         if(title==null){
             return BaseResponse.error("标题是必填项");
         }
 
+        // label task to be added
         LabelTask newLabelTask = new LabelTask(title, description, direction, deadline, new Date(), LabelTask.Status.Proceeding);
 
+        // get user
         String token=JwtToken.getToken(request);
         Integer userId=JwtToken.getUserId(token);
         Optional<User> user=userRepository.findUserById(userId);
@@ -63,7 +68,10 @@ public class LabelTaskServiceImpl implements LabelTaskService {
             return BaseResponse.error("找不到用户");
         }
 
+        // save label task to be added
         labelTaskRepository.save(newLabelTask);
+
+        // update taskUserInfo
         LabelTaskPersonalInfo taskUserInfo=new LabelTaskPersonalInfo(user.get(), newLabelTask);
         taskUserInfo.setRole(LabelTaskPersonalInfo.Role.Admin);
         taskUserRepository.save(taskUserInfo);
@@ -105,56 +113,103 @@ public class LabelTaskServiceImpl implements LabelTaskService {
         Optional<User> user=userRepository.findUserById(userId);
         if(!user.isPresent()) return BaseResponse.error("用户不存在");
 
-        // 根据id找到任务
+        // find task according to taskId
         Optional<LabelTask> updateTask=labelTaskRepository.findById(taskId);
         if(!updateTask.isPresent()) return BaseResponse.error("找不到任务");
 
-        //判断用户权限
+        // judge permission by taskUserInfo
         Optional<LabelTaskPersonalInfo> taskUserInfo=taskUserRepository.findByLabelTaskIdAndUserId(taskId, userId);
         Boolean isAuthorized=taskUserInfo.get().getRole().equals(Role.Admin)? true:false;
         if(!isAuthorized) return BaseResponse.error("没有权限修改");
 
+        // update task
         if(title!=null) updateTask.get().setTitle(title);
         if(description!=null) updateTask.get().setDescription(description);
         if(direction!=null) updateTask.get().setDirection(direction);
         if(deadline!=null) updateTask.get().setDeadline(deadline);
         if(status!=null) updateTask.get().setStatus(status);
-
         labelTaskRepository.save(updateTask.get());
+
         return BaseResponse.success("标注任务更新成功", taskId);
     }
 
     @Override
-    public BaseResponse addMember(Integer taskId, List<String> userNameList) {
+    public BaseResponse addMember(HttpServletRequest request, Integer taskId, List<String> userNameList) {
+        // judge if the task exists
         Optional<LabelTask> labelTask=labelTaskRepository.findById(taskId);
         if(!labelTask.isPresent()) return BaseResponse.error("任务不存在");
 
-        List<LabelTaskPersonalInfo> taskUserInfo=taskUserRepository.findByLabelTaskId(taskId);
+        // get userId
+        String token=JwtToken.getToken(request);
+        Integer userId=JwtToken.getUserId(token);
+        Optional<User> operateUser=userRepository.findUserById(userId);
+        if(!operateUser.isPresent()) return BaseResponse.error("用户不存在");
+
+        // judge permission by taskUserInfo
+        Optional<LabelTaskPersonalInfo> taskUserInfo=taskUserRepository.findByLabelTaskIdAndUserId(taskId, userId);
+        Boolean isAuthorized=taskUserInfo.get().getRole().equals(Role.Admin)? true:false;
+        if(!isAuthorized) return BaseResponse.error("没有权限增加参与角色");
+
+        // add member
         List<String> notFoundUsers=new ArrayList<>();
+        List<LabelTaskPersonalInfo> newTaskUserInfo=new ArrayList<>();
         for(String userName : userNameList){
             User user=userRepository.findUserByUsername(userName);
             boolean isAlreadyAdded = taskUserInfo.stream()
                     .anyMatch(info->info.getUser().equals(user));
-            if(user==null && !isAlreadyAdded){
-                taskUserInfo.add(new LabelTaskPersonalInfo(user, labelTask.get()));
+            if(user!=null && !isAlreadyAdded){
+                newTaskUserInfo.add(new LabelTaskPersonalInfo(user, labelTask.get()));
             }else{
                 notFoundUsers.add(userName);
             }
         }
-        taskUserRepository.saveAll(taskUserInfo);
         if(notFoundUsers.size()==0){
+            taskUserRepository.saveAll(newTaskUserInfo);
             return BaseResponse.success("成功添加用户", userNameList);
         }else {
-            return BaseResponse.error("找不到部分用户", notFoundUsers);
+            return BaseResponse.error("找不到部分用户，请再次确认！", notFoundUsers);
         }
     }
 
     @Override
     public BaseResponse deleteMember(HttpServletRequest request, Integer taskId, String userName) {
-        //确认用户的权限
+        // judge if the task exists
+        Optional<LabelTask> labelTask=labelTaskRepository.findById(taskId);
+        if(!labelTask.isPresent()) return BaseResponse.error("任务不存在");
 
-        return null;
+        // get userId
+        String token=JwtToken.getToken(request);
+        Integer userId=JwtToken.getUserId(token);
+        Optional<User> operateUser=userRepository.findUserById(userId);
+        if(!operateUser.isPresent()) return BaseResponse.error("用户不存在");
+
+        // judge permission by taskUserInfo
+        Optional<LabelTaskPersonalInfo> taskUserInfo=taskUserRepository.findByLabelTaskIdAndUserId(taskId, userId);
+        Boolean isAuthorized=taskUserInfo.get().getRole().equals(Role.Admin)? true:false;
+        if(!isAuthorized) return BaseResponse.error("没有权限删除角色");
+
+        // delete member
+        boolean isAlreadyAdded=false;
+        User user=null;
+        try{
+            user=userRepository.findUserByUsername(userName);
+            isAlreadyAdded=taskUserInfo.stream()
+                    .anyMatch(info->info.getUser().getUsername().equals(userName));
+        }catch (Exception e){
+            return BaseResponse.error("找不到用户");
+        }
+        try{
+            if(isAlreadyAdded){
+                Optional<LabelTaskPersonalInfo> deleteTaskUserInfo=taskUserRepository.findByLabelTaskIdAndUserId(taskId, user.getId());
+                taskUserRepository.delete(deleteTaskUserInfo.get());
+            }
+        }catch (Exception e){
+            return BaseResponse.error("系统错误，删除失败");
+        }
+
+        return BaseResponse.success("成功将用户移除本任务", userName);
     }
+
 
 
 }

@@ -29,11 +29,10 @@ public class TokenInterceptor implements HandlerInterceptor {
             System.out.println("detect login");
             return true;
         }
-        System.out.println("not login");
         // //获取请求头中的token
         final String token;
         final String authHeader = request.getHeader("Authorization");
-        System.out.println(authHeader);
+
         if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith("Bearer ")) {
             //            截取token
             token = authHeader.substring(7);

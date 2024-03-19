@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public BaseResponse<String> loginService(String username, String password){
+    public BaseResponse loginService(String username, String password){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = userRepository.findUserByUsername(username);
 
@@ -31,8 +31,9 @@ public class UserServiceImpl implements UserService {
         map.put("id", String.valueOf(user.getId()));
         map.put("username", user.getUsername());
         String token = JwtToken.createJwtToken(map);
+        TokenParser tokenParser=new TokenParser(token);
 
-        return BaseResponse.success("登录成功", token);
+        return BaseResponse.success("登录成功", tokenParser);
     }
 
     public BaseResponse<TokenParser> registerService(String username, String password, String confirmPassword){
@@ -66,7 +67,6 @@ public class UserServiceImpl implements UserService {
         String token = JwtToken.createJwtToken(map);
 
         TokenParser tokenParser=new TokenParser(token);
-        System.out.println("calling register service");
         return BaseResponse.success("注册成功", tokenParser);
     }
 
