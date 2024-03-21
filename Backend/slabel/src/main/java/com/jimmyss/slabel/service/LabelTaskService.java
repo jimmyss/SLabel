@@ -1,16 +1,16 @@
 package com.jimmyss.slabel.service;
 
 import com.jimmyss.slabel.component.BaseResponse;
+import com.jimmyss.slabel.component.response.TaskResponse;
 import com.jimmyss.slabel.entity.LabelTask;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public interface LabelTaskService {
 
-    BaseResponse<Set<LabelTask>> getLabelTasks(Integer number, HttpServletRequest request);
+    BaseResponse<TaskResponse> getLabelTasks(Integer number, HttpServletRequest request);
 
     BaseResponse<LabelTask> createLabelTask(HttpServletRequest request, String title, String description, String direction, Date deadline);
 

@@ -38,30 +38,20 @@
           <a-layout-content>
             <div class="container">
               <a-space direction="vertical">
-                <a-button type="primary" size="large" width= 100%>{{$t('panel.button.create') }}</a-button>
+                <a-button @click="openForm" type="primary" size="large" width= 100%>{{$t('dataset.button.upload') }}</a-button>
+                <a-modal v-model:visible="visible" title="" @cancel="handleCancel" @before-ok="handleBeforeOk">
+                  <a-form :model="form">
+                    <a-form-item field="title" :label="$t('dataset.form.title')">
+                      <a-input v-model="form.datasetName" />
+                    </a-form-item>
+                    <a-form-item field="description" :label="$t('dataset.form.description')">
+                      <a-input v-model="form.description" />
+                    </a-form-item>
+                  </a-form>
+                </a-modal>
                 <a-grid :cols="24" :col-gap="16" :row-gap="16" style="margin-top: 16px">
-                  <a-grid-item 
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <DatasetCardItem/>
-                  </a-grid-item>
-
-                  <a-grid-item 
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <DatasetCardItem/>
-                  </a-grid-item>
-
-                  <a-grid-item 
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <DatasetCardItem/>
-                  </a-grid-item>
-
-                  <a-grid-item 
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <DatasetCardItem/>
+                  <a-grid-item v-for="(dataset, index) in datasetStore.datasetList" :key="index" :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }">
+                    <DatasetCardItem :dataset="dataset"/>
                   </a-grid-item>
                 </a-grid>
               </a-space>
@@ -75,9 +65,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, provide, onMounted } from 'vue';
+  import { ref, computed, watch, provide, onMounted, reactive } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppStore, useUserStore } from '@/store';
+  import type { uploadDatasetForm } from '@/api/dataset';
 
   import NavBar from '@/components/navbar/index.vue';
   import Menu from '@/components/menu/index.vue';
@@ -85,7 +76,7 @@
   import TabBar from '@/components/tab-bar/index.vue';
   import usePermission from '@/hooks/permission';
   import useResponsive from '@/hooks/responsive';
-
+  import useDatasetStore from '@/store/modules/dataset';
   import DatasetCardItem from './components/DatasetCardItem.vue';
 
   const isInit = ref(false);
@@ -100,6 +91,13 @@
   const renderMenu = computed(() => appStore.menu && !appStore.topMenu);
   const hideMenu = computed(() => appStore.hideMenu);
   const footer = computed(() => appStore.footer);
+  const datasetStore=useDatasetStore();
+  const visible=ref(false);
+  const form= reactive({
+    datasetName: '',
+    description: '',
+  })
+
   const menuWidth = computed(() => {
     return appStore.menuCollapse ? 48 : appStore.menuWidth;
   });
@@ -132,9 +130,30 @@
   provide('toggleDrawerMenu', () => {
     drawerVisible.value = !drawerVisible.value;
   });
-  onMounted(() => {
+  onMounted(async() => {
+    try{
+      await datasetStore.getDatasetList(10);
+    }catch(error){
+      console.error("获取数据集失败:", error);
+    }
     isInit.value = true;
   });
+  const openForm= () =>{
+    visible.value = true;
+  }
+  const handleCancel = () => {
+    visible.value = false;
+  }
+  const handleBeforeOk= async(done)=>{
+    try {
+      await datasetStore.uploadDataset(form as uploadDatasetForm);
+      done();
+      await datasetStore.getDatasetList(10);
+    } catch (error) {
+      console.error(error); 
+      done(false); 
+    }
+  }
 </script>
 
 <script lang="ts">

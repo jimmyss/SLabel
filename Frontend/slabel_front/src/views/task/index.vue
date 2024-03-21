@@ -38,24 +38,26 @@
           <a-layout-content>
             <div class="container">
               <a-space direction="vertical">
-                <a-button type="primary" size="large" width= 100%>{{$t('panel.button.create') }}</a-button>
+                <a-button @click="openForm" type="primary" size="large" width= 100%>{{$t('task.button.create') }}</a-button>
+                <a-modal v-model:visible="visible" title="" @cancel="handleCancel" @before-ok="handleBeforeOk">
+                  <a-form :model="form">
+                    <a-form-item field="title" :label="$t('task.form.title')">
+                      <a-input v-model="form.title" />
+                    </a-form-item>
+                    <a-form-item field="description" :label="$t('task.form.description')">
+                      <a-input v-model="form.description" />
+                    </a-form-item>
+                    <a-form-item field="direction" :label="$t('task.form.direction')">
+                      <a-input v-model="form.direction"/>
+                    </a-form-item>
+                    <a-form-item field="date" :label="$t('task.form.deadline')">
+                      <a-date-picker v-model="form.deadline" :placeholder="$t('task.form.dateRemind')"/>
+                    </a-form-item>
+                  </a-form>
+                </a-modal>
                 <a-grid :cols="24" :col-gap="16" :row-gap="16" style="margin-top: 16px">
-                  <a-grid-item 
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <TaskCardItem/>
-                  </a-grid-item>
-
-                  <a-grid-item 
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <TaskCardItem/>
-                  </a-grid-item>
-
-                  <a-grid-item 
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <TaskCardItem/>
+                  <a-grid-item v-for="(task, index) in taskStore.taskList" :key="index" :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }">
+                    <TaskCardItem :task="task"/>
                   </a-grid-item>
                 </a-grid>
               </a-space>
@@ -69,9 +71,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, provide, onMounted } from 'vue';
+  import { ref, computed, watch, provide, onMounted, reactive } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppStore, useUserStore } from '@/store';
+  import type { createTaskForm } from '@/api/task';
 
   import NavBar from '@/components/navbar/index.vue';
   import Menu from '@/components/menu/index.vue';
@@ -79,7 +82,7 @@
   import TabBar from '@/components/tab-bar/index.vue';
   import usePermission from '@/hooks/permission';
   import useResponsive from '@/hooks/responsive';
-
+  import useTaskStore from '@/store/modules/task';
   import TaskCardItem from './components/taskCardItem.vue';
 
   const isInit = ref(false);
@@ -94,6 +97,15 @@
   const renderMenu = computed(() => appStore.menu && !appStore.topMenu);
   const hideMenu = computed(() => appStore.hideMenu);
   const footer = computed(() => appStore.footer);
+  const taskStore=useTaskStore();
+  const visible=ref(false);
+  const form = reactive({
+      title: '',
+      description: '',
+      direction: '',
+      deadline: new Date() 
+    });
+
   const menuWidth = computed(() => {
     return appStore.menuCollapse ? 48 : appStore.menuWidth;
   });
@@ -126,9 +138,31 @@
   provide('toggleDrawerMenu', () => {
     drawerVisible.value = !drawerVisible.value;
   });
-  onMounted(() => {
+  onMounted(async() => {
+    try{
+      await taskStore.getLabelTasks(10);
+    }catch(error){
+      console.error("获取标注任务失败:", error);
+    }
     isInit.value = true;
   });
+  const openForm= () =>{
+    visible.value = true;
+  }
+  const handleCancel = () => {
+    visible.value = false;
+  }
+  const handleBeforeOk= async(done)=>{
+    try {
+      console.log(form);
+      await taskStore.createLabelTask(form as createTaskForm);
+      done();
+      await taskStore.getLabelTasks(10);
+    } catch (error) {
+      console.error(error); 
+      done(false); 
+    }
+  }
 </script>
 
 <script lang="ts">

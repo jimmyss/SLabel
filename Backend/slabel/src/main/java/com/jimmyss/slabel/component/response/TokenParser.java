@@ -1,4 +1,4 @@
-package com.jimmyss.slabel.component;
+package com.jimmyss.slabel.component.response;
 
 import lombok.Data;
 

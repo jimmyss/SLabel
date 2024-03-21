@@ -13,17 +13,17 @@ export interface RegisterData {
   confirmPassword: string;
 }
 
-export interface LoginRes <T=unknown>{
+export interface LoginRes<T = unknown> {
   msg: string;
   code: number;
   data: T;
   token: string;
 }
 
-export interface RegisterRes <T=unknown>{
+export interface RegisterRes<T = unknown> {
   code: number;
   msg: string;
-  data: T
+  data: T;
   token: string;
 }
 

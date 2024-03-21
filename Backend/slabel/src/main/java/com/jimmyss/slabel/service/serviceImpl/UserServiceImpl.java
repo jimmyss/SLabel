@@ -1,7 +1,7 @@
 package com.jimmyss.slabel.service.serviceImpl;
 
 import com.jimmyss.slabel.component.BaseResponse;
-import com.jimmyss.slabel.component.TokenParser;
+import com.jimmyss.slabel.component.response.TokenParser;
 import com.jimmyss.slabel.entity.User;
 import com.jimmyss.slabel.repository.UserRepository;
 import com.jimmyss.slabel.service.UserService;

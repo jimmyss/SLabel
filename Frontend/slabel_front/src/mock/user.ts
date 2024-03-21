@@ -11,7 +11,7 @@ setupMock({
   mock: false,
   setup() {
     // Mock.XHR.prototype.withCredentials = true;
-    
+
     // 用户信息
     Mock.mock(new RegExp('/api/user/info'), () => {
       if (isLogin()) {
@@ -66,7 +66,6 @@ setupMock({
     // 注册
     Mock.mock(new RegExp('/v1/users/register'), (params: MockParams) => {
       const { username, password, confirmPassword } = JSON.parse(params.body);
-      console.log("using mockjs")
       if (!username) {
         return failResponseWrap(null, '用户名不能为空', 50000);
       }
@@ -79,7 +78,7 @@ setupMock({
       if (password !== confirmPassword) {
         return failResponseWrap(null, '两次密码不一致', 50000);
       }
-      return successResponseWrap({token: '12345'});
+      return successResponseWrap({ token: '12345' });
     });
 
     // 登出

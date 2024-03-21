@@ -32,6 +32,16 @@ public class Dataset {
     private Set<LabelTask> labelTasks;
     @OneToMany(mappedBy = "dataset", fetch= FetchType.LAZY, cascade=CascadeType.ALL)
     private Set<Model> models;
+    public Dataset(String datasetName,
+                   String description,
+                   User user,
+                   Date createdDate) {
+        this.datasetName=datasetName;
+        this.description=description;
+        this.user=user;
+        this.createdDate=createdDate;
+    }
+
     public Dataset() {
 
     }

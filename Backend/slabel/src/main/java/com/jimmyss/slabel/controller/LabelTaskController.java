@@ -20,10 +20,10 @@ import java.util.BitSet;
 public class LabelTaskController {
 
     @Resource
-    LabelTaskServiceImpl labelTaskService;
+    private LabelTaskServiceImpl labelTaskService;
 
     @Autowired
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @GetMapping("")
     BaseResponse getTasks(@RequestParam(name="num", required=false, defaultValue = "10") Integer num){

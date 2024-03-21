@@ -1,6 +1,7 @@
 package com.jimmyss.slabel.service.serviceImpl;
 
 import com.jimmyss.slabel.component.BaseResponse;
+import com.jimmyss.slabel.component.response.TaskResponse;
 import com.jimmyss.slabel.entity.LabelTask;
 import com.jimmyss.slabel.entity.LabelTaskPersonalInfo;
 import com.jimmyss.slabel.entity.User;
@@ -33,7 +34,7 @@ public class LabelTaskServiceImpl implements LabelTaskService {
     private TaskUserRepository taskUserRepository;
 
     @Override
-    public BaseResponse<Set<LabelTask>> getLabelTasks(Integer number, HttpServletRequest request) {
+    public BaseResponse<TaskResponse> getLabelTasks(Integer number, HttpServletRequest request) {
         // get userid from token
         String token=JwtToken.getToken(request);
         Integer userId=JwtToken.getUserId(token);
@@ -46,12 +47,13 @@ public class LabelTaskServiceImpl implements LabelTaskService {
         Set<LabelTask> labelTasks=taskUserInfo.stream()
                 .map(LabelTaskPersonalInfo::getLabelTask)
                 .collect(Collectors.toSet());
+        TaskResponse taskResponse=new TaskResponse(labelTasks);
 
-        return BaseResponse.success("标注任务查询成功",labelTasks);
+        return BaseResponse.success("标注任务查询成功",taskResponse);
     }
 
     @Override
-    public BaseResponse<LabelTask> createLabelTask(HttpServletRequest request, String title, String description, String direction, Date deadline){
+    public BaseResponse createLabelTask(HttpServletRequest request, String title, String description, String direction, Date deadline){
         // precheck the title
         if(title==null){
             return BaseResponse.error("标题是必填项");
@@ -76,7 +78,7 @@ public class LabelTaskServiceImpl implements LabelTaskService {
         taskUserInfo.setRole(LabelTaskPersonalInfo.Role.Admin);
         taskUserRepository.save(taskUserInfo);
 
-        return BaseResponse.success("标注任务创建成功",newLabelTask);
+        return BaseResponse.success("标注任务创建成功");
     }
 
     @Override
@@ -209,7 +211,4 @@ public class LabelTaskServiceImpl implements LabelTaskService {
 
         return BaseResponse.success("成功将用户移除本任务", userName);
     }
-
-
-
 }

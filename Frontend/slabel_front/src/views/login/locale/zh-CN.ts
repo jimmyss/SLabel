@@ -24,5 +24,5 @@ export default {
   'register.form.userName.errMsg': '用户名不能为空',
   'register.form.password.errMsg': '密码不能为空',
   'register.form.confirmPassword.errMsg': '确认密码不能为空',
-  'register.form.register.success':'注册成功，跳转主页中',
+  'register.form.register.success': '注册成功，跳转主页中',
 };

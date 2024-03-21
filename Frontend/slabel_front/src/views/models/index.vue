@@ -75,9 +75,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, provide, onMounted } from 'vue';
+  import { ref, computed, watch, provide, onMounted, reactive } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppStore, useUserStore } from '@/store';
+  // import type {  } from '@/api/model';
 
   import NavBar from '@/components/navbar/index.vue';
   import Menu from '@/components/menu/index.vue';
@@ -85,7 +86,7 @@
   import TabBar from '@/components/tab-bar/index.vue';
   import usePermission from '@/hooks/permission';
   import useResponsive from '@/hooks/responsive';
-
+  import useModelStore from '@/store/modules/model';
   import ModelCardItem from './components/ModelCardItem.vue';
 
   const isInit = ref(false);
@@ -100,6 +101,8 @@
   const renderMenu = computed(() => appStore.menu && !appStore.topMenu);
   const hideMenu = computed(() => appStore.hideMenu);
   const footer = computed(() => appStore.footer);
+  const modelStore=useModelStore();
+  const visible=ref(false);
   const menuWidth = computed(() => {
     return appStore.menuCollapse ? 48 : appStore.menuWidth;
   });

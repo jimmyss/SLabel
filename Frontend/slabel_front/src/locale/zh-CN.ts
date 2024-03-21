@@ -3,6 +3,8 @@ import localeLogin from '@/views/login/locale/zh-CN';
 
 import localeHome from '@/views/home/local/zh-CN';
 import localeTask from '@/views/task/local/zh-CN';
+import localeDataset from '@/views/dataset/local/zh-CN';
+import localeModel from '@/views/models/local/zh-CN';
 
 import localeSettings from './zh-CN/settings';
 
@@ -29,7 +31,9 @@ export default {
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,
-  
+
   ...localeHome,
   ...localeTask,
+  ...localeDataset,
+  ...localeModel,
 };

@@ -85,7 +85,6 @@ const useUserStore = defineStore('user', {
     async register(registerForm: RegisterData) {
       try {
         const res = await userRegister(registerForm);
-        console.log(res);
         setToken(res.data.token);
       } catch (err) {
         clearToken();
@@ -96,7 +95,7 @@ const useUserStore = defineStore('user', {
     // Logout
     async logout() {
       try {
-        const res= await userLogout();
+        const res = await userLogout();
         console.log(res);
       } finally {
         this.logoutCallBack();

@@ -1,12 +1,13 @@
 package com.jimmyss.slabel.service;
 
 import com.jimmyss.slabel.component.BaseResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface DatasetService {
-    BaseResponse getDatasetByUserIdService(Integer userId, Integer number);
+    BaseResponse getDatasets(Integer number, HttpServletRequest request);
 
     BaseResponse downloadDataset(Integer userId, Integer datasetId, String downloadDir);
 
     BaseResponse deleteDatasetByDatasetId(Integer userId, String confirmInfo);
-    BaseResponse addDataset(Integer userId, String uploadDir, String datasetName, String description);
+    BaseResponse addDataset(HttpServletRequest request, String datasetName, String description);
 }
