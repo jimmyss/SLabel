@@ -1,5 +1,7 @@
 export default {
-    'model.button.upload': '上传新的数据集',
-    'model.form.title': '数据集标题',
-    'model.form.description': '数据集描述',
+    'model.button.create': '创建模型',
+    'model.form.title': '模型名称',
+    'model.form.description': '模型描述',
+    'model.form.dataset': '关联数据集',
+    'model.form.dataset.prompt': '请选择关联数据集',
   };

@@ -78,11 +78,9 @@
  import TabBar from '@/components/tab-bar/index.vue';
  import usePermission from '@/hooks/permission';
  import useResponsive from '@/hooks/responsive';
-
-  import LabelBanner from './components/labelBanner.vue';
-  import TaskCard from './components/taskCard.vue';
-  import DatasetCard from './components/DatasetCard.vue';
-  import ModelCard from './components/ModelCard.vue';
+ import TaskCard from './components/taskCard.vue';
+ import DatasetCard from './components/DatasetCard.vue';
+ import ModelCard from './components/ModelCard.vue';
 
   const isInit = ref(false);
   const appStore = useAppStore();
@@ -128,7 +126,7 @@
   provide('toggleDrawerMenu', () => {
     drawerVisible.value = !drawerVisible.value;
   });
-  onMounted(() => {
+  onMounted(async() => {
     isInit.value = true;
   });
 </script>

@@ -1,8 +1,8 @@
 <template>
     <a-card :style="{ width: '400px' }">
       <template #actions>
-        <span class="icon-hover"> <IconThumbUp /> </span>
-        <span class="icon-hover"> <IconShareInternal /> </span>
+        <span class="icon-hover"> <IconDelete /> </span>
+        <span class="icon-hover"> <IconEdit /> </span>
         <span class="icon-hover"> <IconMore /> </span>
       </template>
       <template #cover>
@@ -19,7 +19,7 @@
           />
         </div>
       </template>
-      <a-card-meta title="Card Title" description="This is the description">
+      <a-card-meta :title="model.modelName" :description="model.description">
         <template #avatar>
           <div
             :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
@@ -27,7 +27,7 @@
             <a-avatar :size="24" :style="{ marginRight: '8px' }">
               A
             </a-avatar>
-            <a-typography-text>Username</a-typography-text>
+            <a-typography-text>{{ $t(model.modelName) }}</a-typography-text>
           </div>
         </template>
       </a-card-meta>
@@ -36,13 +36,19 @@
   
   <script>
   import {
-    IconThumbUp,
-    IconShareInternal,
+    IconDelete,
+    IconEdit,
     IconMore,
   } from '@arco-design/web-vue/es/icon';
   
   export default {
-    components: { IconThumbUp, IconShareInternal, IconMore },
+    components: { IconDelete, IconEdit, IconMore },
+    props:{
+      model:{
+        type: Object,
+        required: true,
+      }
+    }
   };
   </script>
   <style scoped>

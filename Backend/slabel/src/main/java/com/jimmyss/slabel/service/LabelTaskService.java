@@ -3,6 +3,7 @@ package com.jimmyss.slabel.service;
 import com.jimmyss.slabel.component.BaseResponse;
 import com.jimmyss.slabel.component.response.TaskResponse;
 import com.jimmyss.slabel.entity.LabelTask;
+import com.jimmyss.slabel.vo.Category;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Date;
@@ -21,4 +22,12 @@ public interface LabelTaskService {
     BaseResponse addMember(HttpServletRequest request, Integer taskId, List<String> userNameList);
 
     BaseResponse deleteMember(HttpServletRequest request, Integer taskId, String userName);
+
+    BaseResponse updateDataset(Integer taskId, Integer datasetId, Boolean ifChoose);
+
+    BaseResponse updateMode(Integer taskId, Integer datasetId, Boolean ifChoose, Boolean local, Integer modelId);
+
+    BaseResponse addCategories(Integer taskId, Category category);
+
+    BaseResponse delCategories(Integer taskId, Category category);
 }

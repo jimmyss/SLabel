@@ -10,6 +10,7 @@ import com.jimmyss.slabel.repository.LabelTaskRepository;
 import com.jimmyss.slabel.repository.UserRepository;
 import com.jimmyss.slabel.service.LabelTaskService;
 import com.jimmyss.slabel.util.JwtToken;
+import com.jimmyss.slabel.vo.Category;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,5 +211,25 @@ public class LabelTaskServiceImpl implements LabelTaskService {
         }
 
         return BaseResponse.success("成功将用户移除本任务", userName);
+    }
+
+    @Override
+    public BaseResponse updateDataset(Integer taskId, Integer datasetId, Boolean ifChoose) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse updateMode(Integer taskId, Integer datasetId, Boolean ifChoose, Boolean local, Integer modelId) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse addCategories(Integer taskId, Category category) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse delCategories(Integer taskId, Category category) {
+        return null;
     }
 }

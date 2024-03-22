@@ -6,14 +6,27 @@ export interface GetModelRes<T=unknown> {
   data: T;
 }
 
-export function getModelList(modelNum: number) {
+export interface createModelForm{
+  modelName: string;
+  datasetId: string;
+  description: string;
+}
+
+export function getModelList() {
   const token = localStorage.getItem('token');
-  return axios.get<GetModelRes>('/v1/user/dataset/models', {
-    params: {
-      num: modelNum,
-    },
+  return axios.get<GetModelRes>('/v1/user/dataset/model', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  });
+}
+
+export function createModel(modelForm: createModelForm){
+  const token=localStorage.getItem('token');
+  console.log(modelForm);
+  return axios.post<GetModelRes>('/v1/user/dataset/model',modelForm,{
+      headers: {
+        Authorizatioin: `Bearer ${token}`,
+      }
   });
 }

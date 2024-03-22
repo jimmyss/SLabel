@@ -34,6 +34,16 @@ public class Model {
         Created, Proceeding, Paused, Stopped
     };
 
+
+    //create a new empty model
+    public Model(Dataset dataset, String modelName, String description){
+        this.dataset=dataset;
+        this.modelName=modelName;
+        this.description=description;
+        this.status=Status.Created;
+        this.createdDate=new Date();
+    }
+
     public Model() {
 
     }

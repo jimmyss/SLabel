@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import {
-  GetModelRes,
+  createModel,
   getModelList,
+  createModelForm
 } from '@/api/model';
 import { responsiveArray } from '@arco-design/web-vue/es/_utils/responsive-observe';
 import { Model, ModelListState } from './types';
@@ -19,15 +20,26 @@ const useModelStore = defineStore('model', {
   },
 
   actions: {
-    // getLabelTasks
-    async getModels(getModelNum: number) {
+    // getModels
+    async getModels() {
       try{
-        const res = await getModelList(getModelNum);
+        const res = await getModelList();
+        console.log(res.data);
         this.modelList=res.data.modelList;
       }catch{
         console.error('Fail to fetch models');
       }
     },
+
+    // createModel
+    async createModel(modelForm: createModelForm) {
+      try{
+        const res = await createModel(modelForm);
+      }catch{
+        console.error('Fail to create model');
+      }
+
+    }
   },
 });
 

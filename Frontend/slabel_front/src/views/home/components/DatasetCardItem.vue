@@ -1,62 +1,67 @@
 <template>
-    <a-card :style="{ width: '280px' }">
-      <template #actions>
-        <span class="icon-hover"> <IconThumbUp /> </span>
-        <span class="icon-hover"> <IconShareInternal /> </span>
-        <span class="icon-hover"> <IconMore /> </span>
-      </template>
-      <template #cover>
+  <a-card :style="{ width: '400px' }">
+    <template #actions>
+      <span class="icon-hover"> <IconDelete /> </span>
+      <span class="icon-hover"> <IconEdit /> </span>
+      <span class="icon-hover"> <IconMore /> </span>
+    </template>
+    <template #cover>
+      <div
+        :style="{
+          height: '100px',
+          overflow: 'hidden',
+        }"
+      >
+        <img
+          :style="{ width: '100%', transform: 'translateY(-20px)' }"
+          alt="dessert"
+          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp"
+        />
+      </div>
+    </template>
+    <a-card-meta :title="dataset.datasetName" :description="dataset.description">
+      <template #avatar>
         <div
-          :style="{
-            height: '100px',
-            overflow: 'hidden',
-          }"
+          :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
         >
-          <img
-            :style="{ width: '100%', transform: 'translateY(-20px)' }"
-            alt="dessert"
-            src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp"
-          />
+          <a-avatar :size="24" :style="{ marginRight: '8px' }">
+            D
+          </a-avatar>
+          <a-typography-text>{{$t(dataset.datasetName)}}</a-typography-text>
         </div>
       </template>
-      <a-card-meta title="Card Title" description="This is the description">
-        <template #avatar>
-          <div
-            :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
-          >
-            <a-avatar :size="24" :style="{ marginRight: '8px' }">
-              A
-            </a-avatar>
-            <a-typography-text>Username</a-typography-text>
-          </div>
-        </template>
-      </a-card-meta>
-    </a-card>
-  </template>
-  
-  <script>
-  import {
-    IconThumbUp,
-    IconShareInternal,
-    IconMore,
-  } from '@arco-design/web-vue/es/icon';
-  
-  export default {
-    components: { IconThumbUp, IconShareInternal, IconMore },
-  };
-  </script>
-  <style scoped>
-  .icon-hover {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    transition: all 0.1s;
+    </a-card-meta>
+  </a-card>
+</template>
+
+<script>
+import {
+  IconDelete,
+  IconEdit,
+  IconMore,
+} from '@arco-design/web-vue/es/icon';
+
+export default {
+  components: { IconDelete, IconEdit, IconMore },
+  props:{
+    dataset:{
+      type: Object,
+      required: true,
+    }
   }
-  .icon-hover:hover {
-    background-color: rgb(var(--gray-2));
-  }
-  </style>
-  
+};
+</script>
+<style scoped>
+.icon-hover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: all 0.1s;
+}
+.icon-hover:hover {
+  background-color: rgb(var(--gray-2));
+}
+</style>
