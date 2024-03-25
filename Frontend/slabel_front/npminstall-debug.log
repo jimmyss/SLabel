@@ -1,9 +1,9 @@
 {
-  root: '/Users/jimmy/workspace/SLabel/Frontend/slabel_front',
+  root: '/Users/jimmy/Documents/University/senior/毕设/项目/slabel_front',
   registry: 'https://registry.npmmirror.com',
   pkgs: [
     {
-      name: 'vite-plugin-imagemin',
+      name: 'ailabel',
       version: 'latest',
       type: 'tag',
       alias: undefined,
@@ -15,7 +15,7 @@
   cacheDir: '/Users/jimmy/.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/jimmy/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","vite-plugin-imagemin"],"original":["--fix-bug-versions","--china","--userconfig=/Users/jimmy/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","vite-plugin-imagemin"]}',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/jimmy/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","ailabel"],"original":["--fix-bug-versions","--china","--userconfig=/Users/jimmy/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","ailabel"]}',
     npm_config_user_agent: 'npminstall/7.11.1 npm/? node/v18.17.1 darwin arm64',
     npm_config_cache: '/Users/jimmy/.npminstall_tarball',
     NODE: '/usr/local/bin/node',
@@ -49,8 +49,8 @@
     npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
     npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
-    npm_rootpath: '/Users/jimmy/workspace/SLabel/Frontend/slabel_front',
-    INIT_CWD: '/Users/jimmy/workspace/SLabel/Frontend/slabel_front'
+    npm_rootpath: '/Users/jimmy/Documents/University/senior/毕设/项目/slabel_front',
+    INIT_CWD: '/Users/jimmy/Documents/University/senior/毕设/项目/slabel_front'
   },
   binaryMirrors: {
     ENVS: {
@@ -185,7 +185,7 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: '/Users/jimmy/workspace/SLabel/Frontend/slabel_front',
+  workspaceRoot: '/Users/jimmy/Documents/University/senior/毕设/项目/slabel_front',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   offline: false,

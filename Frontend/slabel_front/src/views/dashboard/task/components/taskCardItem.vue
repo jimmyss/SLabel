@@ -1,5 +1,5 @@
 <template>
-  <a-card :style="{ width: '400px' }">
+  <a-card :style="{ width: '350px' }">
     <template #actions>
       <span class="icon-hover"> <IconDelete /> </span>
       <span class="icon-hover"> <IconEdit /> </span>
@@ -19,16 +19,15 @@
         />
       </div>
     </template>
-    <a-card-meta
-      :title="dataset.datasetName"
-      :description="dataset.description"
-    >
+    <a-card-meta :title="task.title" :description="task.description">
       <template #avatar>
         <div
           :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
         >
-          <a-avatar :size="24" :style="{ marginRight: '8px' }"> D </a-avatar>
-          <a-typography-text>{{ $t(dataset.datasetName) }}</a-typography-text>
+          <a-avatar :size="24" :style="{ marginRight: '8px' }">
+            {{ $t(task.status[0]) }}
+          </a-avatar>
+          <a-typography-text>{{ $t(task.status) }}</a-typography-text>
         </div>
       </template>
     </a-card-meta>
@@ -41,7 +40,7 @@
   export default {
     components: { IconDelete, IconEdit, IconMore },
     props: {
-      dataset: {
+      task: {
         type: Object,
         required: true,
       },

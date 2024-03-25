@@ -1,57 +1,51 @@
 <template>
-    <a-card :style="{ width: '400px' }">
-      <template #actions>
-        <span class="icon-hover"> <IconDelete /> </span>
-        <span class="icon-hover"> <IconEdit /> </span>
-        <span class="icon-hover"> <IconMore /> </span>
-      </template>
-      <template #cover>
+  <a-card :style="{ width: '400px' }">
+    <template #actions>
+      <span class="icon-hover"> <IconDelete /> </span>
+      <span class="icon-hover"> <IconEdit /> </span>
+      <span class="icon-hover"> <IconMore /> </span>
+    </template>
+    <template #cover>
+      <div
+        :style="{
+          height: '500px',
+          overflow: 'hidden',
+        }"
+      >
+        <img
+          :style="{ width: '100%', transform: 'translateY(-20px)' }"
+          alt="dessert"
+          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp"
+        />
+      </div>
+    </template>
+    <a-card-meta :title="model.modelName" :description="model.description">
+      <template #avatar>
         <div
-          :style="{
-            height: '500px',
-            overflow: 'hidden',
-          }"
+          :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
         >
-          <img
-            :style="{ width: '100%', transform: 'translateY(-20px)' }"
-            alt="dessert"
-            src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp"
-          />
+          <a-avatar :size="24" :style="{ marginRight: '8px' }"> A </a-avatar>
+          <a-typography-text>{{ $t(model.modelName) }}</a-typography-text>
         </div>
       </template>
-      <a-card-meta :title="model.modelName" :description="model.description">
-        <template #avatar>
-          <div
-            :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
-          >
-            <a-avatar :size="24" :style="{ marginRight: '8px' }">
-              A
-            </a-avatar>
-            <a-typography-text>{{ $t(model.modelName) }}</a-typography-text>
-          </div>
-        </template>
-      </a-card-meta>
-    </a-card>
-  </template>
-  
-  <script>
-  import {
-    IconDelete,
-    IconEdit,
-    IconMore,
-  } from '@arco-design/web-vue/es/icon';
-  
+    </a-card-meta>
+  </a-card>
+</template>
+
+<script>
+  import { IconDelete, IconEdit, IconMore } from '@arco-design/web-vue/es/icon';
+
   export default {
     components: { IconDelete, IconEdit, IconMore },
-    props:{
-      model:{
+    props: {
+      model: {
         type: Object,
         required: true,
-      }
-    }
+      },
+    },
   };
-  </script>
-  <style scoped>
+</script>
+<style scoped>
   .icon-hover {
     display: flex;
     align-items: center;
@@ -64,5 +58,4 @@
   .icon-hover:hover {
     background-color: rgb(var(--gray-2));
   }
-  </style>
-  
+</style>

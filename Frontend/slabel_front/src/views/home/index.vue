@@ -32,26 +32,39 @@
         >
           <Menu />
         </a-drawer>
-        
+
         <a-layout class="layout-content" :style="paddingStyle">
           <TabBar v-if="appStore.tabBar" />
           <a-layout-content>
             <div class="container">
               <a-space direction="vertical">
-                <a-grid :cols="24" :col-gap="16" :row-gap="16" style="margin-top: 16px">
+                <a-grid
+                  :cols="24"
+                  :col-gap="16"
+                  :row-gap="16"
+                  style="margin-top: 16px"
+                >
                   <a-grid-item
                     :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
                   >
-                    <TaskCard/>
+                    <TaskCard />
                   </a-grid-item>
                   <a-grid-item
                     :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
                   >
-                    <DatasetCard/>
+                    <DatasetCard />
                   </a-grid-item>
                 </a-grid>
-                <a-grid :cols="24" :col-gap="16" :row-gap="16" style="margin-top: 32px" width=100%>
-                  <a-grid-item :span="{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 }">
+                <a-grid
+                  :cols="24"
+                  :col-gap="16"
+                  :row-gap="16"
+                  style="margin-top: 32px"
+                  width="100%"
+                >
+                  <a-grid-item
+                    :span="{ xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 }"
+                  >
                     <div class="panel">
                       <ModelCard />
                     </div>
@@ -68,19 +81,19 @@
 </template>
 
 <script lang="ts" setup>
- import { ref, computed, watch, provide, onMounted } from 'vue';
- import { useRouter, useRoute } from 'vue-router';
- import { useAppStore, useUserStore } from '@/store';
+  import { ref, computed, watch, provide, onMounted } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import { useAppStore, useUserStore } from '@/store';
 
- import NavBar from '@/components/navbar/index.vue';
- import Menu from '@/components/menu/index.vue';
- import Footer from '@/components/footer/index.vue';
- import TabBar from '@/components/tab-bar/index.vue';
- import usePermission from '@/hooks/permission';
- import useResponsive from '@/hooks/responsive';
- import TaskCard from './components/taskCard.vue';
- import DatasetCard from './components/DatasetCard.vue';
- import ModelCard from './components/ModelCard.vue';
+  import NavBar from '@/components/navbar/index.vue';
+  import Menu from '@/components/menu/index.vue';
+  import Footer from '@/components/footer/index.vue';
+  import TabBar from '@/components/tab-bar/index.vue';
+  import usePermission from '@/hooks/permission';
+  import useResponsive from '@/hooks/responsive';
+  import TaskCard from './components/taskCard.vue';
+  import DatasetCard from './components/DatasetCard.vue';
+  import ModelCard from './components/ModelCard.vue';
 
   const isInit = ref(false);
   const appStore = useAppStore();
@@ -126,15 +139,15 @@
   provide('toggleDrawerMenu', () => {
     drawerVisible.value = !drawerVisible.value;
   });
-  onMounted(async() => {
+  onMounted(async () => {
     isInit.value = true;
   });
 </script>
 
 <script lang="ts">
-export default {
-  name: 'Home', // If you want the include property of keep-alive to take effect, you must name the component
-};
+  export default {
+    name: 'Home', // If you want the include property of keep-alive to take effect, you must name the component
+  };
 </script>
 
 <style lang="less" scoped>

@@ -55,7 +55,11 @@
         <a-button type="primary" html-type="submit" long :loading="loading">
           {{ $t('login.form.login') }}
         </a-button>
-        <a-button long class="login-form-register-btn" @click="$emit('switchForm')" >
+        <a-button
+          long
+          class="login-form-register-btn"
+          @click="$emit('switchForm')"
+        >
           {{ $t('login.form.register') }}
         </a-button>
       </a-space>

@@ -43,7 +43,7 @@
                   type="primary"
                   size="large"
                   width="100%"
-                  >{{ $t('dataset.button.upload') }}</a-button
+                  >{{ $t('task.button.create') }}</a-button
                 >
                 <a-modal
                   v-model:visible="visible"
@@ -52,17 +52,26 @@
                   @before-ok="handleBeforeOk"
                 >
                   <a-form :model="form">
-                    <a-form-item
-                      field="title"
-                      :label="$t('dataset.form.title')"
-                    >
-                      <a-input v-model="form.datasetName" />
+                    <a-form-item field="title" :label="$t('task.form.title')">
+                      <a-input v-model="form.title" />
                     </a-form-item>
                     <a-form-item
                       field="description"
-                      :label="$t('dataset.form.description')"
+                      :label="$t('task.form.description')"
                     >
                       <a-input v-model="form.description" />
+                    </a-form-item>
+                    <a-form-item
+                      field="direction"
+                      :label="$t('task.form.direction')"
+                    >
+                      <a-input v-model="form.direction" />
+                    </a-form-item>
+                    <a-form-item field="date" :label="$t('task.form.deadline')">
+                      <a-date-picker
+                        v-model="form.deadline"
+                        :placeholder="$t('task.form.dateRemind')"
+                      />
                     </a-form-item>
                   </a-form>
                 </a-modal>
@@ -73,11 +82,11 @@
                   style="margin-top: 16px"
                 >
                   <a-grid-item
-                    v-for="(dataset, index) in datasetStore.datasetList"
+                    v-for="(task, index) in taskStore.taskList"
                     :key="index"
                     :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
                   >
-                    <DatasetCardItem :dataset="dataset" />
+                    <TaskCardItem :task="task" />
                   </a-grid-item>
                 </a-grid>
               </a-space>
@@ -88,7 +97,6 @@
       </a-layout>
     </a-layout>
   </a-layout> -->
-
   <div class="container">
     <a-space direction="vertical">
       <a-button
@@ -96,7 +104,7 @@
         type="primary"
         size="large"
         width="100%"
-        >{{ $t('dataset.button.upload') }}</a-button
+        >{{ $t('task.button.create') }}</a-button
       >
       <a-modal
         v-model:visible="visible"
@@ -105,17 +113,26 @@
         @before-ok="handleBeforeOk"
       >
         <a-form :model="form">
-          <a-form-item
-            field="title"
-            :label="$t('dataset.form.title')"
-          >
-            <a-input v-model="form.datasetName" />
+          <a-form-item field="title" :label="$t('task.form.title')">
+            <a-input v-model="form.title" />
           </a-form-item>
           <a-form-item
             field="description"
-            :label="$t('dataset.form.description')"
+            :label="$t('task.form.description')"
           >
             <a-input v-model="form.description" />
+          </a-form-item>
+          <a-form-item
+            field="direction"
+            :label="$t('task.form.direction')"
+          >
+            <a-input v-model="form.direction" />
+          </a-form-item>
+          <a-form-item field="date" :label="$t('task.form.deadline')">
+            <a-date-picker
+              v-model="form.deadline"
+              :placeholder="$t('task.form.dateRemind')"
+            />
           </a-form-item>
         </a-form>
       </a-modal>
@@ -126,11 +143,11 @@
         style="margin-top: 16px"
       >
         <a-grid-item
-          v-for="(dataset, index) in datasetStore.datasetList"
+          v-for="(task, index) in taskStore.taskList"
           :key="index"
           :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
         >
-          <DatasetCardItem :dataset="dataset" />
+          <TaskCardItem :task="task" />
         </a-grid-item>
       </a-grid>
     </a-space>
@@ -141,7 +158,7 @@
   import { ref, computed, watch, provide, onMounted, reactive } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppStore, useUserStore } from '@/store';
-  import type { uploadDatasetForm } from '@/api/dataset';
+  import type { createTaskForm } from '@/api/task';
 
   import NavBar from '@/components/navbar/index.vue';
   import Menu from '@/components/menu/index.vue';
@@ -149,8 +166,8 @@
   import TabBar from '@/components/tab-bar/index.vue';
   import usePermission from '@/hooks/permission';
   import useResponsive from '@/hooks/responsive';
-  import useDatasetStore from '@/store/modules/dataset';
-  import DatasetCardItem from './components/DatasetCardItem.vue';
+  import useTaskStore from '@/store/modules/task';
+  import TaskCardItem from './components/taskCardItem.vue';
 
   const isInit = ref(false);
   const appStore = useAppStore();
@@ -164,11 +181,13 @@
   const renderMenu = computed(() => appStore.menu && !appStore.topMenu);
   const hideMenu = computed(() => appStore.hideMenu);
   const footer = computed(() => appStore.footer);
-  const datasetStore = useDatasetStore();
+  const taskStore = useTaskStore();
   const visible = ref(false);
   const form = reactive({
-    datasetName: '',
+    title: '',
     description: '',
+    direction: '',
+    deadline: new Date(),
   });
 
   const menuWidth = computed(() => {
@@ -205,9 +224,9 @@
   });
   onMounted(async () => {
     try {
-      await datasetStore.getDatasetList(10);
+      await taskStore.getLabelTasks(10);
     } catch (error) {
-      console.error('获取数据集失败:', error);
+      console.error('获取标注任务失败:', error);
     }
     isInit.value = true;
   });
@@ -219,8 +238,9 @@
   };
   const handleBeforeOk = async () => {
     try {
-      await datasetStore.uploadDataset(form as uploadDatasetForm);
-      await datasetStore.getDatasetList(10);
+      console.log(form);
+      await taskStore.createLabelTask(form as createTaskForm);
+      await taskStore.getLabelTasks(10);
     } catch (error) {
       console.error(error);
     }
@@ -229,7 +249,7 @@
 
 <script lang="ts">
   export default {
-    name: 'Dataset', // If you want the include property of keep-alive to take effect, you must name the component
+    name: 'TaskInfo', // If you want the include property of keep-alive to take effect, you must name the component
   };
 </script>
 

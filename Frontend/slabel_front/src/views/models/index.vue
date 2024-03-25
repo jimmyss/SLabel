@@ -1,5 +1,5 @@
 <template>
-  <a-layout class="layout" :class="{ mobile: appStore.hideMenu }">
+  <!-- <a-layout class="layout" :class="{ mobile: appStore.hideMenu }">
     <div v-if="navbar" class="layout-navbar">
       <NavBar />
     </div>
@@ -32,33 +32,70 @@
         >
           <Menu />
         </a-drawer>
-        
+
         <a-layout class="layout-content" :style="paddingStyle">
           <TabBar v-if="appStore.tabBar" />
           <a-layout-content>
             <div class="container">
               <a-space direction="vertical">
-                <a-button @click="openForm" type="primary" size="large" width= 100%>{{$t('model.button.create') }}</a-button>
-                <a-modal v-model:visible="visible" title="" @cancel="handleCancel" @before-ok="handleBeforeOk">
+                <a-button
+                  @click="openForm"
+                  type="primary"
+                  size="large"
+                  width="100%"
+                  >{{ $t('model.button.create') }}</a-button
+                >
+                <a-modal
+                  v-model:visible="visible"
+                  title=""
+                  @cancel="handleCancel"
+                  @before-ok="handleBeforeOk"
+                >
                   <a-form :model="form">
-                    <a-form-item field="modelName" :label="$t('model.form.title')">
+                    <a-form-item
+                      field="modelName"
+                      :label="$t('model.form.title')"
+                    >
                       <a-input v-model="form.modelName" />
                     </a-form-item>
-                    <a-form-item field="description" :label="$t('model.form.description')">
+                    <a-form-item
+                      field="description"
+                      :label="$t('model.form.description')"
+                    >
                       <a-input v-model="form.description" />
                     </a-form-item>
-                    <a-form-item field="datasetName" :label="$t('model.form.dataset')">
-                      <a-select v-model="form.datasetId" :placeholder="$t('model.form.dataset.prompt')" allow-clear>
-                        <a-option v-for="dataset in datasetList" :key="dataset.id" :value="dataset.id">
+                    <a-form-item
+                      field="datasetName"
+                      :label="$t('model.form.dataset')"
+                    >
+                      <a-select
+                        v-model="form.datasetId"
+                        :placeholder="$t('model.form.dataset.prompt')"
+                        allow-clear
+                      >
+                        <a-option
+                          v-for="dataset in datasetList"
+                          :key="dataset.id"
+                          :value="dataset.id"
+                        >
                           {{ dataset.datasetName }}
                         </a-option>
                       </a-select>
                     </a-form-item>
                   </a-form>
                 </a-modal>
-                <a-grid :cols="24" :col-gap="16" :row-gap="16" style="margin-top: 16px">
-                  <a-grid-item v-for="(model, index) in modelStore.modelList" :key="index" :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }">
-                    <ModelCardItem :model="model"/>
+                <a-grid
+                  :cols="24"
+                  :col-gap="16"
+                  :row-gap="16"
+                  style="margin-top: 16px"
+                >
+                  <a-grid-item
+                    v-for="(model, index) in modelStore.modelList"
+                    :key="index"
+                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
+                  >
+                    <ModelCardItem :model="model" />
                   </a-grid-item>
                 </a-grid>
               </a-space>
@@ -68,7 +105,72 @@
         </a-layout>
       </a-layout>
     </a-layout>
-  </a-layout>
+  </a-layout> -->
+
+  <div class="container">
+    <a-space direction="vertical">
+      <a-button
+        @click="openForm"
+        type="primary"
+        size="large"
+        width="100%"
+        >{{ $t('model.button.create') }}</a-button
+      >
+      <a-modal
+        v-model:visible="visible"
+        title=""
+        @cancel="handleCancel"
+        @before-ok="handleBeforeOk"
+      >
+        <a-form :model="form">
+          <a-form-item
+            field="modelName"
+            :label="$t('model.form.title')"
+          >
+            <a-input v-model="form.modelName" />
+          </a-form-item>
+          <a-form-item
+            field="description"
+            :label="$t('model.form.description')"
+          >
+            <a-input v-model="form.description" />
+          </a-form-item>
+          <a-form-item
+            field="datasetName"
+            :label="$t('model.form.dataset')"
+          >
+            <a-select
+              v-model="form.datasetId"
+              :placeholder="$t('model.form.dataset.prompt')"
+              allow-clear
+            >
+              <a-option
+                v-for="dataset in datasetList"
+                :key="dataset.id"
+                :value="dataset.id"
+              >
+                {{ dataset.datasetName }}
+              </a-option>
+            </a-select>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+      <a-grid
+        :cols="24"
+        :col-gap="16"
+        :row-gap="16"
+        style="margin-top: 16px"
+      >
+        <a-grid-item
+          v-for="(model, index) in modelStore.modelList"
+          :key="index"
+          :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
+        >
+          <ModelCardItem :model="model" />
+        </a-grid-item>
+      </a-grid>
+    </a-space>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -99,14 +201,14 @@
   const renderMenu = computed(() => appStore.menu && !appStore.topMenu);
   const hideMenu = computed(() => appStore.hideMenu);
   const footer = computed(() => appStore.footer);
-  const modelStore=useModelStore();
-  const visible=ref(false);
-  const form =reactive({
+  const modelStore = useModelStore();
+  const visible = ref(false);
+  const form = reactive({
     modelName: '',
     datasetId: '',
     description: '',
-  })
-  const datasetList= computed(() => useDatasetStore().datasetList);
+  });
+  const datasetList = computed(() => useDatasetStore().datasetList);
   const menuWidth = computed(() => {
     return appStore.menuCollapse ? 48 : appStore.menuWidth;
   });
@@ -139,36 +241,34 @@
   provide('toggleDrawerMenu', () => {
     drawerVisible.value = !drawerVisible.value;
   });
-  onMounted(async() => {
-    try{
+  onMounted(async () => {
+    try {
       await modelStore.getModels();
-    }catch(error){
-      console.error("获取模型失败:", error);
+    } catch (error) {
+      console.error('获取模型失败:', error);
     }
     isInit.value = true;
   });
-  const openForm= () =>{
+  const openForm = () => {
     visible.value = true;
-  }
+  };
   const handleCancel = () => {
     visible.value = false;
-  }
-  const handleBeforeOk= async(done)=>{
+  };
+  const handleBeforeOk = async () => {
     try {
       await modelStore.createModel(form as createModelForm);
-      done();
       await modelStore.getModels();
     } catch (error) {
-      console.error(error); 
-      done(false); 
+      console.error(error);
     }
-  }
+  };
 </script>
 
 <script lang="ts">
-export default {
-  name: 'Models', // If you want the include property of keep-alive to take effect, you must name the component
-};
+  export default {
+    name: 'Models', // If you want the include property of keep-alive to take effect, you must name the component
+  };
 </script>
 
 <style lang="less" scoped>

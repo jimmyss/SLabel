@@ -2,7 +2,7 @@ import localeMessageBox from '@/components/message-box/locale/zh-CN';
 import localeLogin from '@/views/login/locale/zh-CN';
 
 import localeHome from '@/views/home/local/zh-CN';
-import localeTask from '@/views/task/local/zh-CN';
+import localeTask from '@/views/dashboard/task/local/zh-CN';
 import localeDataset from '@/views/dataset/local/zh-CN';
 import localeModel from '@/views/models/local/zh-CN';
 
@@ -11,9 +11,12 @@ import localeSettings from './zh-CN/settings';
 export default {
   'menu.home': '首页',
   'menu.dataset': '我的数据集',
+  'menu.dataset.list': '数据集列表',
   'menu.models': '我的模型',
-  'menu.task': '我的标注任务',
-  'menu.dashboard': '仪表盘',
+  'menu.models.list':'模型列表',
+  'menu.dashboard': '我的标注任务',
+  'menu.dashboard.taskInfo': '标注管理',
+  'menu.dashboard.labelPanel': '标注工作台',
   'menu.server.dashboard': '仪表盘-服务端',
   'menu.server.workplace': '工作台-服务端',
   'menu.server.monitor': '实时监控-服务端',

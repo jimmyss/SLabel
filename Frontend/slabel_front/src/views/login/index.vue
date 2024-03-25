@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {ref, computed} from 'vue';
+  import { ref, computed } from 'vue';
   import Footer from '@/components/footer/index.vue';
   import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
@@ -34,9 +34,9 @@
   });
 
   function handleSwitchForm() {
-    currentForm.value = currentForm.value === 'LoginForm' ? 'RegisterForm' : 'LoginForm';
+    currentForm.value =
+      currentForm.value === 'LoginForm' ? 'RegisterForm' : 'LoginForm';
   }
-
 </script>
 
 <style lang="less" scoped>

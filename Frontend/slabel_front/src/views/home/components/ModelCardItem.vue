@@ -24,9 +24,7 @@
         <div
           :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
         >
-          <a-avatar :size="24" :style="{ marginRight: '8px' }">
-            A
-          </a-avatar>
+          <a-avatar :size="24" :style="{ marginRight: '8px' }"> A </a-avatar>
           <a-typography-text>{{ $t(model.modelName) }}</a-typography-text>
         </div>
       </template>
@@ -35,33 +33,29 @@
 </template>
 
 <script>
-import {
-  IconDelete,
-  IconEdit,
-  IconMore,
-} from '@arco-design/web-vue/es/icon';
+  import { IconDelete, IconEdit, IconMore } from '@arco-design/web-vue/es/icon';
 
-export default {
-  components: { IconDelete, IconEdit, IconMore },
-  props:{
-    model:{
-      type: Object,
-      required: true,
-    }
-  }
-};
+  export default {
+    components: { IconDelete, IconEdit, IconMore },
+    props: {
+      model: {
+        type: Object,
+        required: true,
+      },
+    },
+  };
 </script>
 <style scoped>
-.icon-hover {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  transition: all 0.1s;
-}
-.icon-hover:hover {
-  background-color: rgb(var(--gray-2));
-}
+  .icon-hover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transition: all 0.1s;
+  }
+  .icon-hover:hover {
+    background-color: rgb(var(--gray-2));
+  }
 </style>
