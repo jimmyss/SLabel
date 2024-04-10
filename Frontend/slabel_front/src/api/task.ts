@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-export interface GetTaskRes<T=unknown> {
+export interface GetTaskRes<T = unknown> {
   code: number;
   msg: string;
   data: T;
 }
 
-export interface createTaskForm{
+export interface createTaskForm {
   title: string;
   description: string;
   direction: string;
@@ -25,11 +25,23 @@ export function getTasks(taskNum: number) {
   });
 }
 
-export function createTask(taskForm: createTaskForm){
-  const token=localStorage.getItem('token');
-  return axios.post<GetTaskRes>('/v1/annotation-tasks',taskForm,{
-      headers: {
-        Authorizatioin: `Bearer ${token}`,
-      }
+export function createTask(taskForm: createTaskForm) {
+  const token = localStorage.getItem('token');
+  return axios.post<GetTaskRes>('/v1/annotation-tasks', taskForm, {
+    headers: {
+      Authorizatioin: `Bearer ${token}`,
+    },
   });
+}
+
+export function getDatasetByTaskId(taskId: number){
+  const token=localStorage.getItem('token');
+  return axios.get('/v1/annotation-tasks/dataset', {
+    params:{
+        id: taskId,
+    },
+    headers:{
+      Authorization: `Bearer ${token}`,
+    }
+  })
 }

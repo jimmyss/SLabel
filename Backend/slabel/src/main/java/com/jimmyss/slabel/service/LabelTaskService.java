@@ -13,6 +13,8 @@ public interface LabelTaskService {
 
     BaseResponse<TaskResponse> getLabelTasks(Integer number, HttpServletRequest request);
 
+    BaseResponse getRelatedDataset(HttpServletRequest request, Integer taskId);
+
     BaseResponse<LabelTask> createLabelTask(HttpServletRequest request, String title, String description, String direction, Date deadline);
 
     BaseResponse deleteLabelTask(HttpServletRequest request, String comfirmInfo, Integer taskId);

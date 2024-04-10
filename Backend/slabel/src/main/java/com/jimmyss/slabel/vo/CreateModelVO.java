@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModelVO {
+public class CreateModelVO {
     @NotEmpty
     private String modelName;
     @Nullable

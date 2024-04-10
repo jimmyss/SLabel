@@ -12,4 +12,5 @@ export interface Task {
 }
 export interface TaskListState {
   taskList: [];
+  chooseTask: number;
 }

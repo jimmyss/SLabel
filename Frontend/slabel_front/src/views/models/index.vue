@@ -1,112 +1,4 @@
 <template>
-  <!-- <a-layout class="layout" :class="{ mobile: appStore.hideMenu }">
-    <div v-if="navbar" class="layout-navbar">
-      <NavBar />
-    </div>
-    <a-layout>
-      <a-layout>
-        <a-layout-sider
-          v-if="renderMenu"
-          v-show="!hideMenu"
-          class="layout-sider"
-          breakpoint="xl"
-          :collapsed="collapsed"
-          :collapsible="true"
-          :width="menuWidth"
-          :style="{ paddingTop: navbar ? '60px' : '' }"
-          :hide-trigger="true"
-          @collapse="setCollapsed"
-        >
-          <div class="menu-wrapper">
-            <Menu />
-          </div>
-        </a-layout-sider>
-        <a-drawer
-          v-if="hideMenu"
-          :visible="drawerVisible"
-          placement="left"
-          :footer="false"
-          mask-closable
-          :closable="false"
-          @cancel="drawerCancel"
-        >
-          <Menu />
-        </a-drawer>
-
-        <a-layout class="layout-content" :style="paddingStyle">
-          <TabBar v-if="appStore.tabBar" />
-          <a-layout-content>
-            <div class="container">
-              <a-space direction="vertical">
-                <a-button
-                  @click="openForm"
-                  type="primary"
-                  size="large"
-                  width="100%"
-                  >{{ $t('model.button.create') }}</a-button
-                >
-                <a-modal
-                  v-model:visible="visible"
-                  title=""
-                  @cancel="handleCancel"
-                  @before-ok="handleBeforeOk"
-                >
-                  <a-form :model="form">
-                    <a-form-item
-                      field="modelName"
-                      :label="$t('model.form.title')"
-                    >
-                      <a-input v-model="form.modelName" />
-                    </a-form-item>
-                    <a-form-item
-                      field="description"
-                      :label="$t('model.form.description')"
-                    >
-                      <a-input v-model="form.description" />
-                    </a-form-item>
-                    <a-form-item
-                      field="datasetName"
-                      :label="$t('model.form.dataset')"
-                    >
-                      <a-select
-                        v-model="form.datasetId"
-                        :placeholder="$t('model.form.dataset.prompt')"
-                        allow-clear
-                      >
-                        <a-option
-                          v-for="dataset in datasetList"
-                          :key="dataset.id"
-                          :value="dataset.id"
-                        >
-                          {{ dataset.datasetName }}
-                        </a-option>
-                      </a-select>
-                    </a-form-item>
-                  </a-form>
-                </a-modal>
-                <a-grid
-                  :cols="24"
-                  :col-gap="16"
-                  :row-gap="16"
-                  style="margin-top: 16px"
-                >
-                  <a-grid-item
-                    v-for="(model, index) in modelStore.modelList"
-                    :key="index"
-                    :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-                  >
-                    <ModelCardItem :model="model" />
-                  </a-grid-item>
-                </a-grid>
-              </a-space>
-            </div>
-          </a-layout-content>
-          <Footer v-if="footer" />
-        </a-layout>
-      </a-layout>
-    </a-layout>
-  </a-layout> -->
-
   <div class="container">
     <a-space direction="vertical">
       <a-button
@@ -166,7 +58,7 @@
           :key="index"
           :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
         >
-          <ModelCardItem :model="model" />
+          <ModelCardItem :model="model" @refreshParent="refresh"/>
         </a-grid-item>
       </a-grid>
     </a-space>
@@ -205,7 +97,7 @@
   const visible = ref(false);
   const form = reactive({
     modelName: '',
-    datasetId: '',
+    datasetId: 0,
     description: '',
   });
   const datasetList = computed(() => useDatasetStore().datasetList);
@@ -249,6 +141,13 @@
     }
     isInit.value = true;
   });
+  const refresh=async()=>{
+    try{
+      await modelStore.getModels();
+    }catch(error){
+      console.error('获取模型失败', error);
+    }
+  }
   const openForm = () => {
     visible.value = true;
   };

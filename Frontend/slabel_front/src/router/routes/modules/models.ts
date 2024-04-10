@@ -11,19 +11,19 @@ const MODELS: AppRouteRecordRaw = {
     icon: 'icon-experiment',
     order: 3,
   },
-  children:[
+  children: [
     {
       path: 'modelList',
       name: 'modelList',
-      component: ()=>import('@/views/models/index.vue'),
-      meta:{
+      component: () => import('@/views/models/index.vue'),
+      meta: {
         locale: 'menu.models.list',
         noAffix: true,
         requiresAuth: true,
         hideInMenu: false,
-      }
-    }
-  ]
+      },
+    },
+  ],
 };
 
 export default MODELS;

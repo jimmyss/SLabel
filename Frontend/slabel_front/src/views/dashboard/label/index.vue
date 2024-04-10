@@ -1,5 +1,31 @@
 <template>
-  <a-button>click_me!</a-button>
+  <div class="container">
+    <a-space direction="vertical" size="mini" style="flex-grow: 1;">
+      <!-- 顶部工具栏 -->
+      <a-card>
+        <TopBar/>
+      </a-card>
+      <a-space direction="horizontal" size="mini">
+        <!-- 左边Canvas+dialogBox -->
+        <a-grid :cols="24" :cols-gap="30" :row-gap="16" style="margin-top: 4px" class="left-side">
+          <a-grid-item :span="24">
+            <a-card class="canvas-container">
+              <Canvas/>
+            </a-card>
+          </a-grid-item>
+          <a-grid-item :span="24">
+            <a-card class="dialogBox-container">
+              <DialogBox/>
+            </a-card>
+          </a-grid-item>
+        </a-grid>
+        <!-- 右边collection -->
+        <a-card class="collection-container">
+          <Collection/>
+        </a-card>
+      </a-space>
+    </a-space>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -7,12 +33,16 @@
   import { useAppStore } from '@/store';
   import { useRouter, useRoute } from 'vue-router';
 
+  import usePermission from '@/hooks/permission';
+  import useResponsive from '@/hooks/responsive';
   import NavBar from '@/components/navbar/index.vue';
   import Menu from '@/components/menu/index.vue';
   import Footer from '@/components/footer/index.vue';
   import TabBar from '@/components/tab-bar/index.vue';
-  import usePermission from '@/hooks/permission';
-  import useResponsive from '@/hooks/responsive';
+  import TopBar from './components/topBar.vue';
+  import Canvas from './components/canvas.vue';
+  import Collection from './components/collection.vue';
+  import DialogBox from './components/dialogBox.vue';
 
   const isInit=ref(false);
   const appStore=useAppStore();
@@ -135,14 +165,22 @@
     padding-bottom: 0;
     display: flex;
   }
-
   .left-side {
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    overflow: auto;
+  }
+  .canvas-container {
+    flex: 8; /* Canvas 占据的空间比例 */
   }
 
-  .right-side {
-    width: 280px;
+  .dialogbox-container {
+    flex: 2; /* DialogBox 占据的空间比例 */
+  }
+
+  .collection-container {
+    width: 400px; /* 或根据需要调整 */
+    height: 735px;
     margin-left: 16px;
   }
 
@@ -154,6 +192,11 @@
   :deep(.panel-border) {
     margin-bottom: 0;
     border-bottom: 1px solid rgb(var(--gray-2));
+  }
+  .down-right{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
   .moduler-wrap {
     border-radius: 4px;

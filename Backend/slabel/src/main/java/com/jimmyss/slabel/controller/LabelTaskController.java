@@ -30,6 +30,11 @@ public class LabelTaskController {
         return labelTaskService.getLabelTasks(num, request);
     }
 
+    @GetMapping("/dataset")
+    BaseResponse getRelatedDataset(@RequestParam(name="id", required = false, defaultValue = "-1") Integer taskId){
+        return labelTaskService.getRelatedDataset(request, taskId);
+    }
+
     @PostMapping("")
     BaseResponse createTask(@RequestBody @Valid LabelTaskVO labelTaskVO){
         return labelTaskService.createLabelTask(

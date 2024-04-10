@@ -2,9 +2,11 @@ package com.jimmyss.slabel.service.serviceImpl;
 
 import com.jimmyss.slabel.component.BaseResponse;
 import com.jimmyss.slabel.component.response.TaskResponse;
+import com.jimmyss.slabel.entity.Dataset;
 import com.jimmyss.slabel.entity.LabelTask;
 import com.jimmyss.slabel.entity.LabelTaskPersonalInfo;
 import com.jimmyss.slabel.entity.User;
+import com.jimmyss.slabel.repository.DatasetRepository;
 import com.jimmyss.slabel.repository.TaskUserRepository;
 import com.jimmyss.slabel.repository.LabelTaskRepository;
 import com.jimmyss.slabel.repository.UserRepository;
@@ -14,6 +16,7 @@ import com.jimmyss.slabel.vo.Category;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.stream.Task;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -51,6 +54,40 @@ public class LabelTaskServiceImpl implements LabelTaskService {
         TaskResponse taskResponse=new TaskResponse(labelTasks);
 
         return BaseResponse.success("标注任务查询成功",taskResponse);
+    }
+
+    @Override
+    public BaseResponse getRelatedDataset(HttpServletRequest request, Integer taskId){
+        // get userid from token
+        String token=JwtToken.getToken(request);
+        Integer userId=JwtToken.getUserId(token);
+
+        //get taskUserInfo
+        Optional<User> user=userRepository.findUserById(userId);
+        List<LabelTaskPersonalInfo> taskUserInfo=taskUserRepository.findByUserId(user.get().getId());
+
+        Optional<LabelTaskPersonalInfo> labelTaskPersonalInfo=taskUserInfo.stream()
+                .filter(taskInfo -> taskId.equals(taskInfo.getLabelTask().getId()))
+                .findFirst();
+
+        if(!labelTaskPersonalInfo.isPresent()){
+            return BaseResponse.error("找不到任务");
+        }
+
+        //get related dataset
+        Optional<LabelTask> labelTask=labelTaskRepository.findById(taskId);
+        try {
+            Dataset dataset=labelTask.get().getDataset();
+            Integer datasetId=-1;
+            if(dataset!=null){
+                datasetId=dataset.getId();
+                return BaseResponse.success("对应数据集id为", datasetId);
+            }else{
+                return BaseResponse.success("对应数据集id为", datasetId);
+            }
+        }catch(Exception e){
+            return BaseResponse.error("找不到数据集");
+        }
     }
 
     @Override

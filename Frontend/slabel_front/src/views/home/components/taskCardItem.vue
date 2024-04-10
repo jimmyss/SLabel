@@ -8,9 +8,9 @@
       :loading="loading"
     >
       <template #actions>
-        <span class="icon-hover"> <IconDelete /> </span>
-        <span class="icon-hover"> <IconEdit /> </span>
-        <span class="icon-hover"> <IconMore /> </span>
+        <span class="icon-hover"> <IconDelete @click="deleteClick($event)"/> </span>
+        <span class="icon-hover"> <IconEdit @click="editClick($event)"/> </span>
+        <span class="icon-hover"> <IconMore @click="moreClick($event)"/> </span>
       </template>
       <template #cover>
         <div
@@ -70,7 +70,18 @@
       }
     }
   };
-  
+  function deleteClick(event){
+    event.stopPropagation();
+    console.log("delete")
+  }
+  function editClick(event){
+    event.stopPropagation();
+    console.log("edit")
+  }
+  function moreClick(event){
+    event.stopPropagation();
+    console.log("more")
+  }
 </script>
 
 <script lang="ts">
@@ -98,7 +109,7 @@
     background-color: rgb(var(--gray-2));
   }
   .card-item {
-    margin-bottom: 16px;
+    margin-bottom: 2px;
   }
   .card-style {
     transition-property: all;

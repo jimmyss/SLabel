@@ -3,6 +3,7 @@ import localeLogin from '@/views/login/locale/zh-CN';
 
 import localeHome from '@/views/home/local/zh-CN';
 import localeTask from '@/views/dashboard/task/local/zh-CN';
+import labelPanel from '@/views/dashboard/label/local/zh-CN';
 import localeDataset from '@/views/dataset/local/zh-CN';
 import localeModel from '@/views/models/local/zh-CN';
 
@@ -13,7 +14,7 @@ export default {
   'menu.dataset': '我的数据集',
   'menu.dataset.list': '数据集列表',
   'menu.models': '我的模型',
-  'menu.models.list':'模型列表',
+  'menu.models.list': '模型列表',
   'menu.dashboard': '我的标注任务',
   'menu.dashboard.taskInfo': '标注管理',
   'menu.dashboard.labelPanel': '标注工作台',
@@ -37,6 +38,7 @@ export default {
 
   ...localeHome,
   ...localeTask,
+  ...labelPanel,
   ...localeDataset,
   ...localeModel,
 };

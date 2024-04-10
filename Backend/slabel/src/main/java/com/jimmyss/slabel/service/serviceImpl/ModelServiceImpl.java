@@ -70,8 +70,20 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public BaseResponse deleteModel(HttpServletRequest request, String confirmInfo, Integer modelId) {
-        return null;
+    public BaseResponse deleteModel(HttpServletRequest request, Integer modelId) {
+        // get userid from token
+        String token= JwtToken.getToken(request);
+        Integer userId=JwtToken.getUserId(token);
+
+        // find related dataset
+        Optional<Model> model=modelRepository.findModelById(modelId);
+        if(model.isPresent()){
+            Integer uId=model.get().getDataset().getUser().getId();
+            if(uId.equals(userId)) {
+                modelRepository.delete(model.get());
+                return BaseResponse.success("删除模型任务成功");
+            }return BaseResponse.error("无法删除训练任务");
+        }return BaseResponse.error("找不到模型训练任务");
     }
 
     @Override

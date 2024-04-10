@@ -3,8 +3,8 @@ package com.jimmyss.slabel.controller;
 
 import com.jimmyss.slabel.component.BaseResponse;
 import com.jimmyss.slabel.service.serviceImpl.ModelServiceImpl;
-import com.jimmyss.slabel.vo.ModelVO;
-import jakarta.annotation.Resource;
+import com.jimmyss.slabel.vo.CreateModelVO;
+import com.jimmyss.slabel.vo.DelModelVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,19 @@ public class ModelController {
     }
 
     @PostMapping("")
-    public BaseResponse createModel(@RequestBody @Valid ModelVO modelVO){
+    public BaseResponse createModel(@RequestBody @Valid CreateModelVO createModelVO){
         return modelService.createModel(
                 request,
-                modelVO.getModelName(),
-                modelVO.getDescription(),
-                modelVO.getDatasetId());
+                createModelVO.getModelName(),
+                createModelVO.getDescription(),
+                createModelVO.getDatasetId());
+    }
+
+    @DeleteMapping("")
+    public BaseResponse deleteModel(@RequestBody @Valid DelModelVO delModelVO){
+        return modelService.deleteModel(
+                request,
+                delModelVO.getModelId()
+        );
     }
 }

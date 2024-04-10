@@ -16,6 +16,9 @@ dependencies:
   '@vueuse/core':
     specifier: ^9.3.0
     version: 9.13.0(vue@3.2.47)
+  ailabel:
+    specifier: ^5.1.15
+    version: 5.1.15
   arco-design-pro-vue:
     specifier: ^2.7.2
     version: 2.7.2
@@ -1485,6 +1488,10 @@ packages:
       clean-stack: 2.2.0
       indent-string: 4.0.0
     dev: true
+
+  /ailabel@5.1.15:
+    resolution: {integrity: sha512-0HYvf/Q0bq4wzIkyWfNIkJeypU4+wg7j5K+aQB6iYEcpd+CWE/DIXlTq/mzCw55pwfYeh6icNMhqk/Ie7h/CYA==, tarball: https://registry.npmmirror.com/ailabel/-/ailabel-5.1.15.tgz}
+    dev: false
 
   /ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
@@ -5625,7 +5632,7 @@ packages:
     dev: true
 
   /make-dir@1.3.0:
-    resolution: {integrity: sha512-2w31R7SJtieJJnQtGc7RVL2StM2vGYVfqUOvUDxH6bC6aJTxPxTF0GnIgCyu7tjockiUWAYQRbxa7vKn34s5sQ==}
+    resolution: {integrity: sha512-2w31R7SJtieJJnQtGc7RVL2StM2vGYVfqUOvUDxH6bC6aJTxPxTF0GnIgCyu7tjockiUWAYQRbxa7vKn34s5sQ==, tarball: https://registry.npmmirror.com/make-dir/-/make-dir-1.3.0.tgz}
     engines: {node: '>=4'}
     dependencies:
       pify: 3.0.0

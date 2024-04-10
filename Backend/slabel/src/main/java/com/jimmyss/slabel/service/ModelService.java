@@ -9,7 +9,7 @@ public interface ModelService {
 
     BaseResponse createModel(HttpServletRequest request, String modelName, String description, Integer datasetId);
 
-    BaseResponse deleteModel(HttpServletRequest request, String confirmInfo, Integer modelId);
+    BaseResponse deleteModel(HttpServletRequest request, Integer modelId);
 
     BaseResponse updateModel(HttpServletRequest request, String newModelName, String description);
 

@@ -1,9 +1,14 @@
 <template>
-  <a-card :style="{ width: '400px' }">
+  <a-card
+   :style="{ width: '400px' }"
+   hoverable
+   class="card-style"
+   :loading="loading"
+  >
     <template #actions>
-      <span class="icon-hover"> <IconDelete /> </span>
-      <span class="icon-hover"> <IconEdit /> </span>
-      <span class="icon-hover"> <IconMore /> </span>
+      <span class="icon-hover"> <IconDelete @click="deleteClick($event)"/> </span>
+        <span class="icon-hover"> <IconEdit @click="editClick($event)"/> </span>
+        <span class="icon-hover"> <IconMore @click="moreClick($event)"/> </span>
     </template>
     <template #cover>
       <div
@@ -32,18 +37,38 @@
   </a-card>
 </template>
 
-<script>
+<script lang="ts" setup>
   import { IconDelete, IconEdit, IconMore } from '@arco-design/web-vue/es/icon';
+  import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
+  import { useRouter, useRoute } from 'vue-router';
+  import useLoading from '@/hooks/loading';
 
-  export default {
-    components: { IconDelete, IconEdit, IconMore },
-    props: {
-      model: {
-        type: Object,
-        required: true,
-      },
+  const { loading, setLoading } = useLoading();
+  const router = useRouter();
+  const route = useRoute();
+  function deleteClick(event){
+    event.stopPropagation();
+    console.log("delete")
+  }
+  function editClick(event){
+    event.stopPropagation();
+    console.log("edit")
+  }
+  function moreClick(event){
+    event.stopPropagation();
+    console.log("more")
+  }
+</script>
+<script lang="ts">
+export default {
+  components: { IconDelete, IconEdit, IconMore },
+  props: {
+    model: {
+      type: Object,
+      required: true,
     },
-  };
+  },
+};
 </script>
 <style scoped>
   .icon-hover {
@@ -57,5 +82,11 @@
   }
   .icon-hover:hover {
     background-color: rgb(var(--gray-2));
+  }
+  .card-style {
+    transition-property: all;
+  }
+  .card-style:hover {
+    transform: translateY(-4px);
   }
 </style>

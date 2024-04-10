@@ -11,19 +11,19 @@ const DATASET: AppRouteRecordRaw = {
     icon: 'icon-storage',
     order: 2,
   },
-  children:[
+  children: [
     {
       path: 'datasetList',
       name: 'datasetList',
-      component: ()=>import('@/views/dataset/index.vue'),
-      meta:{
+      component: () => import('@/views/dataset/index.vue'),
+      meta: {
         locale: 'menu.dataset.list',
         noAffix: true,
         requiresAuth: true,
         hideInMenu: false,
-      }
-    }
-  ]
+      },
+    },
+  ],
 };
 
 export default DATASET;
